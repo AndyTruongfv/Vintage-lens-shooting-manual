@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   THEME VARIABLES — 3 modes: light (warm analog paper default),
+   dark (darkroom/studio), sepia (warm toned vintage book)
+   ============================================================ */
+@layer base {
+  :root,
+  [data-theme="light"] {
+    --color-paper: 250 247 242;          /* #FAF7F2 warm photo paper */
+    --color-paper-card: 255 255 255;      /* #FFFFFF clean white card */
+    --color-paper-border: 229 223 215;    /* #E5DFD7 soft warm border */
+    --color-ink: 31 30 29;               /* #1F1E1D charcoal black */
+    --color-ink-muted: 86 82 77;          /* #56524D */
+    --color-ink-subtle: 140 135 128;      /* #8C8780 */
+    --color-surface: 244 239 234;         /* #F4EFEA warm surface */
+    --color-surface-hover: 237 231 223;   /* #EDE7DF */
+    --color-surface-border: 229 223 215;  /* #E5DFD7 */
+    --color-header: 250 247 242;          /* same as paper */
+    --color-header-border: 229 223 215;   /* #E5DFD7 */
+    --color-accent: 180 83 9;             /* amber-700 warm brand */
+    --color-accent-soft: 253 230 138;     /* amber-200 */
+    --color-accent-amber: 217 119 6;      /* amber-600 */
+    --color-accent-emerald: 13 148 136;   /* teal-600 */
+    --color-accent-positive: 217 119 6;   /* amber-600 for positive */
+    --color-accent-negative: 37 99 235;   /* blue-600 for negative */
+    --color-accent-neutral: 115 115 115;  /* zinc-500 */
+  }
+
+  [data-theme="dark"] {
+    --color-paper: 18 18 20;             /* #121214 darkroom */
+    --color-paper-card: 28 28 31;         /* #1C1C1F lead-grey card */
+    --color-paper-border: 45 45 50;       /* #2D2D32 */
+    --color-ink: 245 245 240;            /* ivory white */
+    --color-ink-muted: 168 168 160;       /* #A8A8A0 */
+    --color-ink-subtle: 100 100 95;       /* #646460 */
+    --color-surface: 24 24 27;            /* #18181B */
+    --color-surface-hover: 36 36 40;      /* #242428 */
+    --color-surface-border: 45 45 50;     /* #2D2D32 */
+    --color-header: 18 18 20;             /* #121214 */
+    --color-header-border: 45 45 50;      /* #2D2D32 */
+    --color-accent: 245 158 11;           /* amber-500 */
+    --color-accent-soft: 120 53 15;       /* amber-900/20 */
+    --color-accent-amber: 245 158 11;     /* amber-500 */
+    --color-accent-emerald: 52 211 153;   /* emerald-400 */
+    --color-accent-positive: 52 211 153;  /* emerald-400 */
+    --color-accent-negative: 96 165 250;  /* blue-400 */
+    --color-accent-neutral: 161 161 170;  /* zinc-400 */
+  }
+
+  [data-theme="sepia"] {
+    --color-paper: 244 233 216;           /* #F4E9D8 warm aged paper */
+    --color-paper-card: 250 242 228;      /* #FAF2E4 slightly lighter card */
+    --color-paper-border: 218 203 178;    /* #DACBB2 */
+    --color-ink: 68 52 32;                /* #443420 dark sepia ink */
+    --color-ink-muted: 107 87 63;         /* #6B573F */
+    --color-ink-subtle: 153 133 107;      /* #99856B */
+    --color-surface: 237 225 205;         /* #EDE1CD */
+    --color-surface-hover: 230 216 193;   /* #E6D8C1 */
+    --color-surface-border: 218 203 178;  /* #DACBB2 */
+    --color-header: 244 233 216;          /* same as paper */
+    --color-header-border: 218 203 178;   /* #DACBB2 */
+    --color-accent: 139 90 43;            /* warm brown-amber */
+    --color-accent-soft: 210 180 140;     /* tan */
+    --color-accent-amber: 180 100 40;     /* burnt amber */
+    --color-accent-emerald: 80 120 100;   /* muted sage */
+    --color-accent-positive: 180 100 40;  /* burnt amber */
+    --color-accent-negative: 70 100 140;  /* muted steel blue */
+    --color-accent-neutral: 130 115 95;   /* muted warm grey */
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    overscroll-behavior-y: none;
+    touch-action: manipulation;
+  }
+
+  ::selection {
+    @apply bg-accent-amber/30;
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .paper-texture {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+}
