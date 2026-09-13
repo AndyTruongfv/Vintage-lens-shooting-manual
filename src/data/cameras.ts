@@ -15,8 +15,8 @@ export const cameras: CameraInfo[] = [
     recommendedLenses:
       'Cặp đôi Tokina 28-70mm f/2.8 Angénieux (qua FTZ), Nikkor-S.C 55mm f/1.2, M42 Carl Zeiss Flektogon 35mm f/2.4 MC',
     recommendedProfiles:
-      'C-1 (Minolta Rokkor Warm), C-16 (Angénieux Cinema), C-3 (Fuji Pro 400H), C-14 (Takumar Golden Amber)',
-    recommendedRecipeIds: ['C-1', 'C-16', 'C-3', 'C-6', 'C-14', 'C-15'],
+      'C-1 (Minolta Rokkor Warm), C-18 (Dreamy Hawkeye), C-16 (Angénieux Cinema), C-3 (Fuji Pro 400H), C-14 (Takumar Golden Amber)',
+    recommendedRecipeIds: ['C-1', 'C-18', 'C-16', 'C-3', 'C-6', 'C-14', 'C-15'],
     tips: [
       'Chống rung IBIS 5 trục: Cho phép chụp tay với lens cổ ở tốc độ màn trập chậm hơn 2-3 stops mà không bị nhòe.',
       'Focus Peaking + Phóng đại điểm nét (Fn1): Hỗ trợ lấy nét tay (MF) chuẩn xác từng sợi tóc ở khẩu độ lớn f/1.2 - f/1.4.',

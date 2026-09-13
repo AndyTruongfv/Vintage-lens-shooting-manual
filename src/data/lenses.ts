@@ -78,7 +78,7 @@ export const lensesVault: LensVaultItem[] = [
     goldenMilestones:
       'Chân dung đêm ánh nến/đèn đường, cảnh quán bar ấm cúng, ảnh ý niệm nghệ thuật.',
     recommendedBodies: ['Z5', 'D800E'],
-    recommendedRecipeIds: ['C-6', 'C-13', 'C-12', 'C-14', 'C-15'],
+    recommendedRecipeIds: ['C-6', 'C-13', 'C-12', 'C-14', 'C-15', 'C-18'],
   },
   {
     id: 'vn-tamron-90-25-52b',

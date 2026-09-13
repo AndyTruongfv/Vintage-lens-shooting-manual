@@ -443,5 +443,31 @@ export const recipes: Recipe[] = [
     },
     recommendedBodies: ['D800E', 'Z5'],
   },
+  {
+    id: 'C-18',
+    name: 'Dreamy Hawkeye (Minolta 58 1.2 Emulation)',
+    tag: 'Hawkeye Glow / Creamy Bokeh / Soft Contrast',
+    category: 'Portraits',
+    baseProfile: 'Portrait',
+    lensMatch: 'Nikkor 55mm f/1.2 (qua FTZ / Non-CPU: 55mm f/1.2) / Minolta PG Rokkor 58mm f/1.2',
+    scenario: 'Chân dung xóa phông bơ mịn màng, chụp bóng râm dịu (Open Shade), bắt ven sáng xiên kẽ lá, tone da hồng hào rạng rỡ cổ điển',
+    parameters: {
+      sharpening: '+1.5',
+      midSharpening: '0.0',
+      clarity: '-1.25',
+      contrast: '-1.0',
+      highlights: '-0.5',
+      shadows: '+0.5',
+      saturation: '0.0',
+      hue: '0.0',
+    },
+    wb: {
+      base: 'Direct Kelvin (5500K)',
+      amber: '+0.5 (ấm hổ phách)',
+      magenta: '+0.75 (khử vàng, hồng hào da)',
+      note: 'WB Direct Kelvin (5500K) dịch chuyển M: +0.75 (khử vàng, hồng hào da), A: +0.5 (ấm hổ phách). Khẩu độ: f/1.2 (toàn thân/bán thân tan biến hậu cảnh) | f/1.4 (cận cảnh sắc nét con ngươi).',
+    },
+    recommendedBodies: ['Z5'],
+  },
 ];
 

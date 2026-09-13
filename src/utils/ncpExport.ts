@@ -146,6 +146,14 @@ export const recipeNcpMetaMap: Record<string, RecipeNcpMeta> = {
     recommendedLenses: 'Carl Zeiss Jena Sonnar 135mm f/3.5 MC (Chữ đỏ), Carl Zeiss Jena Flektogon 35mm f/2.4 MC 1Q',
     wbSummary: 'Direct Sunlight (5200K) | Blue +0.5 (A-0.5), Magenta +0.5',
   },
+  'C-18': {
+    filename: 'C18_Nikkor55_DreamyHawk.NCP',
+    slotName: 'DREAMY-HAW',
+    lensDescriptor: 'Nikkor 55 f/1.2 / Minolta 58',
+    tacticalMission: 'Hiệu ứng Hawkeye Glow, xóa phông bơ mịn màng, tương phản mềm và da hồng hào ấm hổ phách tự nhiên.',
+    recommendedLenses: 'Nikkor 55mm f/1.2 (FTZ), Minolta PG Rokkor 58mm f/1.2',
+    wbSummary: 'Direct Kelvin (5500K) | Amber +0.5, Magenta +0.75',
+  },
 };
 
 export function getRecipeNcpMeta(recipe: Recipe): RecipeNcpMeta {

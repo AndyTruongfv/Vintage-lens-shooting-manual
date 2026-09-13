@@ -105,9 +105,9 @@ function App() {
 
   return (
     <div className="paper-texture min-h-screen bg-paper text-ink transition-colors duration-300">
-      {/* 1. Minimal Sticky Header (Logo + Actions only, ~48px height) */}
-      <header className="sticky top-0 z-30 safe-top border-b border-header-border bg-header/95 backdrop-blur-xl shadow-xs">
-        <div className="mx-auto max-w-2xl px-3 sm:px-4 py-2 flex items-center justify-between">
+      {/* Header bar (relative layout - scrolls away naturally with page) */}
+      <header className="relative w-full border-b border-header-border bg-header/95 backdrop-blur-xl shadow-xs safe-top">
+        <div className="relative w-full max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           {/* Logo & Title */}
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl bg-accent/15 text-accent shadow-xs ring-1 ring-accent/30 shrink-0">
@@ -174,8 +174,8 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content Area (Normal document flow — all controls scroll naturally) */}
-      <main className="mx-auto max-w-2xl px-3 sm:px-4 py-2 sm:py-3 space-y-2.5 sm:space-y-3.5">
+      {/* Main Content Area (relative layout with max-w-4xl - controls scroll naturally) */}
+      <main className="relative w-full max-w-4xl mx-auto px-4 py-2 sm:py-3 space-y-2.5 sm:space-y-3.5">
         {/* Quick Offline PWA banner if not installed */}
         {!pwa.isInstalled && (
           <div className="flex items-center justify-between gap-2 rounded-xl border border-accent/25 bg-accent/10 px-3 py-1.5 text-xs shadow-xs">
