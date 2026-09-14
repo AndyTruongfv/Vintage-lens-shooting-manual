@@ -15,8 +15,8 @@ export const cameras: CameraInfo[] = [
     recommendedLenses:
       'Cặp đôi Tokina 28-70mm f/2.8 Angénieux (qua FTZ), Nikkor-S.C 55mm f/1.2, M42 Carl Zeiss Flektogon 35mm f/2.4 MC',
     recommendedProfiles:
-      'C-1 (Minolta Rokkor Warm), C-19 (Starry Bubble Dream), C-18 (Dreamy Hawkeye), C-16 (Angénieux Cinema), C-3 (Fuji Pro 400H)',
-    recommendedRecipeIds: ['C-1', 'C-19', 'C-18', 'C-16', 'C-3', 'C-6', 'C-14', 'C-15'],
+      'C-1 (Minolta Rokkor Warm), C-20 (Autumn Bokina Glow), C-19 (Starry Bubble Dream), C-18 (Dreamy Hawkeye), C-16 (Angénieux Cinema)',
+    recommendedRecipeIds: ['C-1', 'C-20', 'C-19', 'C-18', 'C-16', 'C-3', 'C-6', 'C-14', 'C-15'],
     tips: [
       'Chống rung IBIS 5 trục: Cho phép chụp tay với lens cổ ở tốc độ màn trập chậm hơn 2-3 stops mà không bị nhòe.',
       'Focus Peaking + Phóng đại điểm nét (Fn1): Hỗ trợ lấy nét tay (MF) chuẩn xác từng sợi tóc ở khẩu độ lớn f/1.2 - f/1.4.',
@@ -38,8 +38,8 @@ export const cameras: CameraInfo[] = [
     recommendedLenses:
       'Tokina 90mm f/2.5 "Bokina" (+ Macro Tube 1:1), Carl Zeiss Flektogon 35mm f/2.4 MC 1Q, Tamron SP 180mm f/2.5 LD Anniversary',
     recommendedProfiles:
-      'C-19 (Starry Bubble Dream), C-17 (Zeiss Jena 3D), C-5 (Bokina Macro 3D), C-15 (Bubble Prism), C-10 (Neopan Acros 100)',
-    recommendedRecipeIds: ['C-19', 'C-17', 'C-5', 'C-10', 'C-4', 'C-13', 'C-14', 'C-15'],
+      'C-20 (Autumn Bokina Glow), C-19 (Starry Bubble Dream), C-17 (Zeiss Jena 3D), C-5 (Bokina Macro 3D), C-15 (Bubble Prism)',
+    recommendedRecipeIds: ['C-20', 'C-19', 'C-17', 'C-5', 'C-10', 'C-4', 'C-13', 'C-14', 'C-15'],
     tips: [
       'Không có bộ lọc AA (No OLPF): Chi tiết vi mô siêu nét, hạn chế kéo Clarity trên +1.0 để tránh ảnh bị gắt.',
       'Độ phân giải 36MP cực nhạy nét: Luôn dùng Live View zoom 100% để lấy nét tay vi mô đạt độ nét căng tuyệt đối.',
@@ -61,8 +61,8 @@ export const cameras: CameraInfo[] = [
     recommendedLenses:
       'Tokina 28-70mm f/2.8 Pro I (AF ngàm F trực tiếp), Nikon AF 135mm f/2.0 DC, Nikkor 105mm f/2.5 AI-S',
     recommendedProfiles:
-      'C-2 (Kodak Portra 400), C-16 (Angénieux Cinema), C-14 (Takumar Golden Amber), C-1 (Minolta Rokkor Warm)',
-    recommendedRecipeIds: ['C-2', 'C-16', 'C-11', 'C-1', 'C-14'],
+      'C-2 (Kodak Portra 400), C-20 (Autumn Bokina Glow), C-16 (Angénieux Cinema), C-14 (Takumar Golden Amber)',
+    recommendedRecipeIds: ['C-2', 'C-20', 'C-16', 'C-11', 'C-1', 'C-14'],
     tips: [
       'Mô tơ lấy nét trục vít (Screw-drive AF): Hỗ trợ toàn bộ ống kính AF-D huyền thoại như 135mm f/2.0 DC, 85mm f/1.4D, Tokina 28-70mm.',
       'Màn hình lật đa góc: Cực kỳ hữu dụng khi chụp macro góc thấp hoặc chụp chân dung ngang hông (waist-level).',

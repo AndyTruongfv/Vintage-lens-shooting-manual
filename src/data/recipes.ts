@@ -495,5 +495,31 @@ export const recipes: Recipe[] = [
     },
     recommendedBodies: ['Z5', 'D800E'],
   },
+  {
+    id: 'C-20',
+    name: 'Autumn Bokina Glow (Tokina AT-X Macro 90mm)',
+    tag: 'Macro / Autumn Glow / Bokina Velvet',
+    category: 'Landscape/Macro',
+    baseProfile: 'Standard',
+    lensMatch: 'Tokina AT-X 90mm f/2.5 "Bokina" / Tokina AT-X AF 90mm f/2.8 Macro',
+    scenario: 'Khai thác tối đa độ nét vi phẫu cực cao (micro-contrast) cùng hiệu ứng xóa phông mượt mà như nhung của dòng macro huyền thoại "The Bokina", giúp tách biệt hoàn toàn những chiếc lá chuyển màu rực rỡ khỏi hậu cảnh mù mịt dưới ánh nắng mùa thu.',
+    parameters: {
+      sharpening: '+3.0',
+      midSharpening: '+1.5',
+      clarity: '+0.5',
+      contrast: '+0.5',
+      highlights: '-1.0',
+      shadows: '+1.0',
+      saturation: '+1.5',
+      hue: '+0.5',
+    },
+    wb: {
+      base: 'Daylight (5200K) hoặc Cloudy (6000K)',
+      amber: '+1.5 (ấm áp sắc thu vàng cam)',
+      magenta: '+0.5 (tươi tắn, tôn sắc lá phong đỏ)',
+      note: 'Mở lớn ở f/2.5 đến f/2.8 khi cần hiệu ứng bokeh bong bóng lung linh xuyên qua tán lá; khép nhẹ ở f/4 nếu muốn tăng độ nét sắc sảo cho toàn bộ gân lá khi chụp cận cảnh. Tận dụng cự ly lấy nét linh hoạt bắt góc ngược sáng (backlighting) để tạo hiệu ứng viền lá rực sáng nghệ thuật.',
+    },
+    recommendedBodies: ['D800E', 'Z5', 'D750'],
+  },
 ];
 

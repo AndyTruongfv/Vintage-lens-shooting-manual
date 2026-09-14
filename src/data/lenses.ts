@@ -97,7 +97,7 @@ export const lensesVault: LensVaultItem[] = [
     goldenMilestones:
       'Chân dung bán thân cận cảnh, hoa cỏ nghệ thuật, chụp sản phẩm tinh xảo.',
     recommendedBodies: ['D800E', 'D750'],
-    recommendedRecipeIds: ['C-5', 'C-2', 'C-9', 'C-15'],
+    recommendedRecipeIds: ['C-5', 'C-20', 'C-2', 'C-9', 'C-15'],
   },
   {
     id: 'vn-tamron-90-28-127e',
@@ -116,7 +116,7 @@ export const lensesVault: LensVaultItem[] = [
     goldenMilestones:
       'Macro 1:1 cực đại hoa lá/côn trùng, chi tiết trang sức, chân dung đặc tả cao cấp.',
     recommendedBodies: ['D800E', 'Z5'],
-    recommendedRecipeIds: ['C-5', 'C-10', 'C-4', 'C-15'],
+    recommendedRecipeIds: ['C-5', 'C-20', 'C-10', 'C-4', 'C-15'],
   },
   {
     id: 'vn-nikon-135-20-dc',
@@ -571,7 +571,7 @@ export const lensesVault: LensVaultItem[] = [
     goldenMilestones:
       'Tinh thể băng tuyết mùa đông Bắc Âu, côn trùng & hoa dại mùa hè Phần Lan, chân dung đặc tả chiều sâu con ngươi và ánh mắt.',
     recommendedBodies: ['Z5', 'D800E', 'D750'],
-    recommendedRecipeIds: ['C-5', 'C-10', 'C-15'],
+    recommendedRecipeIds: ['C-5', 'C-20', 'C-10', 'C-15'],
   },
   {
     id: 'vn-industar-61-lz',

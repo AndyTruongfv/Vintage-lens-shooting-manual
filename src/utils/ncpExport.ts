@@ -162,6 +162,14 @@ export const recipeNcpMetaMap: Record<string, RecipeNcpMeta> = {
     recommendedLenses: 'Industar-61 L/Z 50mm f/2.8 M42 (+ Extension Tube M42-Nikon Z)',
     wbSummary: 'Auto 1 / Daylight (5200K) | Amber +0.75, Magenta +0.25',
   },
+  'C-20': {
+    filename: 'C20_Tokina90_AutumnGlow.NCP',
+    slotName: 'AUTUMNGLOW',
+    lensDescriptor: 'Tokina 90 Bokina',
+    tacticalMission: 'Độ nét vi phẫu micro-contrast & xóa phông nhung mượt Bokina, tôn sắc lá vàng/lá đỏ rực rỡ dưới nắng thu ngược sáng.',
+    recommendedLenses: 'Tokina AT-X 90mm f/2.5 "Bokina" (+ Macro Tube 1:1), Tokina AT-X AF 90mm f/2.8 Macro',
+    wbSummary: 'Daylight / Cloudy | Amber +1.5, Magenta +0.5',
+  },
 };
 
 export function getRecipeNcpMeta(recipe: Recipe): RecipeNcpMeta {
