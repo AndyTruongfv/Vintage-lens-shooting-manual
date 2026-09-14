@@ -33,6 +33,90 @@ interface VaultViewProps {
   isCloudConnected?: boolean;
 }
 
+export type FocalRangeKey = 'all' | 'wide' | '35mm' | '50_55mm' | 'portrait_macro' | 'telephoto';
+
+interface FocalGroupMeta {
+  id: FocalRangeKey;
+  label: string;
+  badge: string;
+  shortLabel: string;
+  tagline: string;
+  icon: string;
+  matcher: (focal: string) => boolean;
+}
+
+export const FOCAL_GROUPS: FocalGroupMeta[] = [
+  {
+    id: 'all',
+    label: 'Tất cả tiêu cự',
+    badge: 'Toàn bộ kho',
+    shortLabel: 'Tất cả',
+    tagline: 'Toàn bộ 31 ống kính',
+    icon: '🌐',
+    matcher: () => true,
+  },
+  {
+    id: 'wide',
+    label: 'Góc siêu rộng & Rộng (< 35mm)',
+    badge: '< 35mm',
+    shortLabel: 'Góc rộng (<35mm)',
+    tagline: '18-35mm, 24mm, 28-70mm, 24-120mm',
+    icon: '🏔️',
+    matcher: (focal: string) =>
+      focal.includes('18-35') || focal.includes('24mm') || focal.includes('28-70') || focal.includes('24-120'),
+  },
+  {
+    id: '35mm',
+    label: 'Tiêu cự 35mm Kinh điển',
+    badge: '35mm',
+    shortLabel: '35mm',
+    tagline: 'Flektogon 35/2.4, Samyang 35/1.4, 35-70mm...',
+    icon: '🚶',
+    matcher: (focal: string) =>
+      focal.includes('35mm') || focal.includes('18-35') || focal.includes('35-70') || focal.includes('28-70') || focal.includes('24-120'),
+  },
+  {
+    id: '50_55mm',
+    label: 'Tiêu chuẩn 50mm & 55mm',
+    badge: '50 - 55mm',
+    shortLabel: '50mm - 55mm',
+    tagline: 'Takumar, Nikkor-S.C, Industar, Minolta, Sigma...',
+    icon: '🎯',
+    matcher: (focal: string) =>
+      focal.includes('50mm') || focal.includes('55mm') || focal.includes('35-70') || focal.includes('28-70') || focal.includes('24-120'),
+  },
+  {
+    id: 'portrait_macro',
+    label: 'Chân dung & Macro (85mm - 105mm)',
+    badge: '85 - 105mm',
+    shortLabel: '85mm - 105mm',
+    tagline: 'AF 85/1.8D, Tamron 90 Macro x2, Tokina 90, Nikkor 105/2.5...',
+    icon: '🌸',
+    matcher: (focal: string) =>
+      focal.includes('85mm') ||
+      focal.includes('90mm') ||
+      focal.includes('105mm') ||
+      focal.includes('24-120') ||
+      focal.includes('70-210') ||
+      focal.includes('80-200') ||
+      focal.includes('80-210'),
+  },
+  {
+    id: 'telephoto',
+    label: 'Telephoto Tầm xa (≥ 135mm)',
+    badge: '≥ 135mm',
+    shortLabel: 'Tele (≥135mm)',
+    tagline: 'DC 135mm, Sonnar 135, Nikkor-Q 135, Tamron 180, Zoom 80-200...',
+    icon: '🔭',
+    matcher: (focal: string) =>
+      focal.includes('135mm') ||
+      focal.includes('180mm') ||
+      focal.includes('70-210') ||
+      focal.includes('80-200') ||
+      focal.includes('80-210'),
+  },
+];
+
 export function VaultView({
   onSelectRecipe,
   onSelectBody,
@@ -43,6 +127,8 @@ export function VaultView({
   isCloudConnected = false,
 }: VaultViewProps) {
   const [baseFilter, setBaseFilter] = useState<'All' | LensLocation>('All');
+  const [focalFilter, setFocalFilter] = useState<FocalRangeKey>('all');
+  const [showMatrix, setShowMatrix] = useState(true);
   const [search, setSearch] = useState('');
   const [downloaded, setDownloaded] = useState(false);
   const [selectedLensForDossier, setSelectedLensForDossier] = useState<LensVaultItem | null>(null);
@@ -52,12 +138,36 @@ export function VaultView({
   const fiCount = useMemo(() => lensesVault.filter((l) => l.base === 'Finland').length, []);
   const purchaseCount = useMemo(() => Object.keys(purchases).length, [purchases]);
 
+  // Dynamic focal distribution metrics
+  const focalStats = useMemo(() => {
+    return FOCAL_GROUPS.map((grp) => {
+      const vn = lensesVault.filter((l) => l.base === 'Vietnam' && grp.matcher(l.focalLength)).length;
+      const fi = lensesVault.filter((l) => l.base === 'Finland' && grp.matcher(l.focalLength)).length;
+      const total = lensesVault.filter((l) => grp.matcher(l.focalLength)).length;
+      return {
+        ...grp,
+        vn,
+        fi,
+        total,
+      };
+    });
+  }, []);
 
   const filteredLenses = useMemo(() => {
     const query = search.toLowerCase().trim();
+    const activeFocalGroup = FOCAL_GROUPS.find((g) => g.id === focalFilter);
+
     return lensesVault.filter((lens) => {
+      // 1. Base filter
       const matchBase = baseFilter === 'All' || lens.base === baseFilter;
       if (!matchBase) return false;
+
+      // 2. Focal group filter
+      if (activeFocalGroup && activeFocalGroup.id !== 'all') {
+        if (!activeFocalGroup.matcher(lens.focalLength)) return false;
+      }
+
+      // 3. Search query
       if (!query) return true;
 
       const haystack = [
@@ -76,7 +186,7 @@ export function VaultView({
 
       return haystack.includes(query);
     });
-  }, [baseFilter, search]);
+  }, [baseFilter, focalFilter, search]);
 
   const handleExport = () => {
     downloadVaultCatalog();
@@ -129,7 +239,7 @@ export function VaultView({
                 : 'border border-paper-border bg-paper-card text-ink-muted hover:border-accent/40 hover:text-ink'
             }`}
           >
-            <span>Tất cả ({lensesVault.length})</span>
+            <span>Tất cả vị trí ({lensesVault.length})</span>
           </button>
 
           <button
@@ -155,7 +265,72 @@ export function VaultView({
             <span className="text-sm">🇫🇮</span>
             <span>Phần Lan Base ({fiCount})</span>
           </button>
+
+          <button
+            onClick={() => setShowMatrix((prev) => !prev)}
+            className="ml-auto flex items-center gap-1 text-[11px] font-mono font-bold text-accent hover:underline px-2 py-1 rounded-lg hover:bg-accent/10 transition-colors"
+          >
+            <span>{showMatrix ? 'Thu gọn bảng tiêu cự' : 'Xem bảng tổng kết tiêu cự'}</span>
+          </button>
         </div>
+
+        {/* Interactive Focal Matrix Summary Cards / Table */}
+        {showMatrix && (
+          <div className="mt-4 rounded-2xl border border-paper-border/80 bg-surface/90 p-3 sm:p-4 transition-all">
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-1.5 text-ink font-bold text-xs">
+                <span>📊</span>
+                <span>Bảng Tổng Kết Phân Bổ Tiêu Cự (Nhấn để lọc nhanh):</span>
+              </div>
+              {focalFilter !== 'all' && (
+                <button
+                  onClick={() => setFocalFilter('all')}
+                  className="text-[10px] font-mono font-bold text-accent hover:underline"
+                >
+                  Xóa lọc tiêu cự (Xem tất cả)
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+              {focalStats.map((item) => {
+                const isSelected = focalFilter === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setFocalFilter(item.id)}
+                    className={`flex flex-col items-start p-2.5 rounded-xl border text-left transition-all duration-200 active:scale-95 ${
+                      isSelected
+                        ? 'border-accent bg-accent text-paper shadow-sm ring-2 ring-accent/30'
+                        : 'border-paper-border bg-paper-card hover:border-accent/50 hover:bg-paper-card/80 text-ink'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-sm">{item.icon}</span>
+                      <span
+                        className={`font-mono text-[10px] font-black px-1.5 py-0.5 rounded-md ${
+                          isSelected ? 'bg-white/20 text-white' : 'bg-accent/15 text-accent'
+                        }`}
+                      >
+                        {item.total} lens
+                      </span>
+                    </div>
+                    <div className="mt-1 font-bold text-xs truncate w-full">{item.shortLabel}</div>
+                    <div
+                      className={`mt-1 flex items-center gap-1 font-mono text-[10px] ${
+                        isSelected ? 'text-white/80' : 'text-ink-subtle'
+                      }`}
+                    >
+                      <span>🇻🇳 {item.vn}</span>
+                      <span>•</span>
+                      <span>🇫🇮 {item.fi}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Search Bar in Vault */}
         <div className="mt-3 relative">
@@ -172,14 +347,28 @@ export function VaultView({
 
       {/* Result counter & Purchase Stats */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-        <p className="font-mono text-xs font-semibold text-ink-subtle">
-          Hiển thị <span className="font-bold text-ink">{filteredLenses.length}</span> / {lensesVault.length} ống kính
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-mono text-xs font-semibold text-ink-subtle">
+            Hiển thị <span className="font-bold text-ink">{filteredLenses.length}</span> / {lensesVault.length} ống kính
+          </p>
           {baseFilter !== 'All' && (
-            <span className="ml-1.5 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-bold text-accent">
+            <span className="rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-bold text-accent">
               {baseFilter === 'Vietnam' ? '🇻🇳 Base Việt Nam' : '🇫🇮 Base Phần Lan'}
             </span>
           )}
-        </p>
+          {focalFilter !== 'all' && (
+            <span className="flex items-center gap-1 rounded bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-300">
+              <span>Tiêu cự: {FOCAL_GROUPS.find((g) => g.id === focalFilter)?.shortLabel}</span>
+              <button
+                onClick={() => setFocalFilter('all')}
+                className="hover:text-red-500 ml-0.5 text-xs font-black"
+                title="Bỏ lọc tiêu cự"
+              >
+                ×
+              </button>
+            </span>
+          )}
+        </div>
 
         {/* Purchase Info count & Cloud badge */}
         <div className="flex items-center gap-2">
