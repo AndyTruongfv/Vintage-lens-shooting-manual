@@ -2,28 +2,9 @@ import type { LensVaultItem } from '../types';
 
 export const lensesVault: LensVaultItem[] = [
   // =========================================================================
-  // BASE VIỆT NAM (17 ỐNG KÍNH)
+  // BASE VIỆT NAM (18 ỐNG KÍNH - SẮP XẾP TỪ WIDE ĐẾN TELE)
   // =========================================================================
   {
-    id: 'vn-takumar-50-14',
-    name: 'S-M-C Takumar 50mm f/1.4',
-    nickname: 'Thorium Radioactive Warmth',
-    base: 'Vietnam',
-    mount: 'M42',
-    focalLength: '50mm',
-    maxAperture: 'f/1.4',
-    filterThread: '49mm',
-    specialFeatures: ['Thorium Glass', 'Super-Multi-Coated', 'Vòng nét bơ mịn'],
-    history:
-      'Huyền thoại quang học của Asahi Pentax (1971-1979). Sử dụng thấu kính chứa phóng xạ Thorium oxide làm tăng chi số khúc xạ cực cao, tạo nên chất ảnh ấm vàng tự nhiên theo thời gian.',
-    strengths:
-      'Độ nét tâm xuất sắc ngay từ f/1.4, bokeh mắt mèo xoáy nhẹ đầy mê hoặc, sắc ấm mật ong (warm amber glow) tôn da người Châu Á cực kỳ rực rỡ.',
-    goldenMilestones:
-      'Chân dung hoàng hôn (Golden Hour), chụp ngược sáng dịu, ảnh hoài niệm thập niên 70.',
-    recommendedBodies: ['Z5', 'D750'],
-    recommendedRecipeIds: ['C-1', 'C-2', 'C-6', 'C-14'],
-  },
-   {
     id: 'vn-nikon-18-35-f35-45g-ed',
     name: 'Nikon AF-S NIKKOR 18-35mm f/3.5-4.5G ED',
     nickname: 'Featherweight Ultrawide Explorer',
@@ -47,23 +28,80 @@ export const lensesVault: LensVaultItem[] = [
     recommendedRecipeIds: ['C-3', 'C-4', 'C-10', 'C-18'],
   },
   {
-    id: 'vn-takumar-55-18',
-    name: 'S-M-C Takumar 55mm f/1.8',
-    nickname: 'Street Sharp Razor',
+    id: 'vn-tokina-28-70-pro1-duo',
+    name: 'Tokina AT-X PRO 28-70mm f/2.8 Đời 1 (Angénieux Twin #1 & #2)',
+    nickname: 'Bản Angénieux Cặp đôi song sinh',
+    base: 'Vietnam',
+    mount: 'F-mount (Screw-drive AF)',
+    focalLength: '28-70mm',
+    maxAperture: 'f/2.8',
+    filterThread: '77mm',
+    specialFeatures: ['Công thức quang học Angénieux Pháp', 'Vỏ nhám sần Pro Heavy-duty', 'Cặp đôi sao lưu 2 Body'],
+    history:
+      'Sở hữu công thức quang học mua bản quyền từ huyền thoại điện ảnh Angénieux 28-70mm f/2.6 của Pháp. Thấu kính thủy tinh đúc trứ danh tạo nên chất màu điện ảnh vô đối. Cặp đôi gồm 2 Unit sao lưu chiến lược để tác chiến song song 2 body (D750 & Z5).',
+    strengths:
+      'Tông màu ấm mật ong nồng nàn, chuyển vùng highlight êm dịu không gắt, flare dạng vòng cung điện ảnh ấm áp, độ bền cơ học nồi đồng cối đá.',
+    goldenMilestones:
+      'Quay phim/chụp ảnh cưới phong cách điện ảnh, chân dung hoàng hôn, phóng sự tiệc tác chiến đa góc máy.',
+    recommendedBodies: ['Z5', 'D750'],
+    recommendedRecipeIds: ['C-1', 'C-16', 'C-3', 'C-2', 'C-11', 'C-14'],
+  },
+  {
+    id: 'vn-czj-flektogon-35-24-mc-1q',
+    name: 'Carl Zeiss Jena Flektogon 35mm f/2.4 MC (Chữ đỏ Fullbox 1Q)',
+    nickname: 'The Legendary 19cm Close-Focus 1Q',
     base: 'Vietnam',
     mount: 'M42',
-    focalLength: '55mm',
-    maxAperture: 'f/1.8',
+    focalLength: '35mm',
+    maxAperture: 'f/2.4',
     filterThread: '49mm',
-    specialFeatures: ['Lớp phủ SMC 7 lớp', 'Kích thước siêu nhỏ gọn', 'Độ tương phản cao'],
+    specialFeatures: ['Lấy nét siêu gần 19cm', 'Chứng chỉ chất lượng cao nhất 1Q', 'MC Red Letter'],
     history:
-      'Một trong những ống kính tiêu chuẩn có lớp tráng phủ SMC 7 lớp đầu tiên trên thế giới. Độ chính xác cơ khí đỉnh cao của Pentax.',
+      'Ống kính 35mm được tôn sùng nhất của hệ M42. Khoảng cách lấy nét tối thiểu chỉ 19cm biến nó thành một ống kính nửa góc rộng, nửa macro cực kỳ độc đáo.',
     strengths:
-      'Vi tương phản cực sắc, độ nét đều từ tâm ra rìa, khả năng chống lóa flare vượt trội hơn hẳn các lens cùng thời.',
+      'Hiệu ứng phối cảnh phóng đại góc gần ngoạn mục, màu sắc rực rỡ đậm đà kiểu Zeiss, độ nét cực cao toàn dải.',
     goldenMilestones:
-      'Nhiếp ảnh đường phố đen trắng, tài liệu phóng sự, dạo phố đêm Sài Gòn / Hà Nội.',
+      'Street life cận cảnh, hoa lá macro góc rộng, nội thất cổ kính và ẩm thực.',
     recommendedBodies: ['D800E', 'Z5'],
-    recommendedRecipeIds: ['C-8', 'C-10', 'C-4', 'C-14'],
+    recommendedRecipeIds: ['C-17', 'C-4', 'C-5', 'C-8', 'C-15'],
+  },
+  {
+    id: 'vn-nikon-35-70-35-ais',
+    name: 'Nikon 35-70mm f/3.5 AI-S',
+    nickname: 'Constant Aperture Studio Zoom',
+    base: 'Vietnam',
+    mount: 'F-mount (AI-S)',
+    focalLength: '35-70mm',
+    maxAperture: 'f/3.5',
+    filterThread: '62mm',
+    specialFeatures: ['Khẩu cố định f/3.5', 'Chế độ Macro switch @ 70mm', 'Thân kim loại nặng'],
+    history:
+      'Ống kính zoom tiêu chuẩn chuyên nghiệp của Nikon đầu thập niên 80, được các studio và tạp chí thời bấy giờ tin cậy nhờ chất lượng quang học ngang ngửa ống fix.',
+    strengths:
+      'Độ tương phản cao, hình ảnh chắc nịch, chuyển vùng sắc nét ổn định toàn dải tiêu cự.',
+    goldenMilestones:
+      'Chụp sự kiện gia đình, dạo phố đa dụng, tĩnh vật và món ăn góc chụp cận cảnh.',
+    recommendedBodies: ['D750', 'Z5'],
+    recommendedRecipeIds: ['C-1', 'C-4', 'C-11'],
+  },
+  {
+    id: 'vn-takumar-50-14',
+    name: 'S-M-C Takumar 50mm f/1.4',
+    nickname: 'Thorium Radioactive Warmth',
+    base: 'Vietnam',
+    mount: 'M42',
+    focalLength: '50mm',
+    maxAperture: 'f/1.4',
+    filterThread: '49mm',
+    specialFeatures: ['Thorium Glass', 'Super-Multi-Coated', 'Vòng nét bơ mịn'],
+    history:
+      'Huyền thoại quang học của Asahi Pentax (1971-1979). Sử dụng thấu kính chứa phóng xạ Thorium oxide làm tăng chi số khúc xạ cực cao, tạo nên chất ảnh ấm vàng tự nhiên theo thời gian.',
+    strengths:
+      'Độ nét tâm xuất sắc ngay từ f/1.4, bokeh mắt mèo xoáy nhẹ đầy mê hoặc, sắc ấm mật ong (warm amber glow) tôn da người Châu Á cực kỳ rực rỡ.',
+    goldenMilestones:
+      'Chân dung hoàng hôn (Golden Hour), chụp ngược sáng dịu, ảnh hoài niệm thập niên 70.',
+    recommendedBodies: ['Z5', 'D750'],
+    recommendedRecipeIds: ['C-1', 'C-2', 'C-6', 'C-14'],
   },
   {
     id: 'vn-nikkor-sc-50-14',
@@ -85,6 +123,44 @@ export const lensesVault: LensVaultItem[] = [
     recommendedRecipeIds: ['C-2', 'C-1', 'C-11'],
   },
   {
+    id: 'vn-industar-61-lz',
+    name: 'Industar-61 L/Z 50mm f/2.8 MC',
+    nickname: 'Soviet Star Bokeh & Lanthanum Crystal Macro',
+    base: 'Vietnam',
+    mount: 'M42 (kèm Extension Tube Macro sang Nikon Z / F)',
+    focalLength: '50mm',
+    maxAperture: 'f/2.8',
+    filterThread: '49mm',
+    specialFeatures: ['Lá khẩu ngôi sao 6 cánh (f/4-f/5.6)', 'Thấu kính chứa tinh thể Lanthanum', 'Tráng phủ MC đa tầng', 'Macro siêu cận cảnh'],
+    history:
+      'Ống kính huyền thoại độc nhất vô nhị của Liên Xô (nhà máy LZOS). Sử dụng thủy tinh pha tinh thể nguyên tố đất hiếm Lanthanum nhằm gia tăng chiết suất và độ phân giải vi mô quang học. Cơ chế lá khẩu tạo hình ngôi sao 6 cánh sắc nét độc quyền.',
+    strengths:
+      'Tạo hiệu ứng bokeh ngôi sao 6 cánh lung linh khi khép f/4 - f/5.6, bokeh tròn bong bóng tại f/2.8. Khi kết hợp cùng ống nối macro (Extension Tube M42 - Z), ống kính biến thành cỗ máy macro siêu thực phóng đại chi tiết cận cảnh ấn tượng.',
+    goldenMilestones:
+      'Macro hoa cỏ, giọt sương sớm, tĩnh vật vi mô, bắt ven sáng đèn trang trí tạo bokeh ngôi sao vintage.',
+    recommendedBodies: ['Z5', 'D800E'],
+    recommendedRecipeIds: ['C-19', 'C-5', 'C-15', 'C-4'],
+  },
+  {
+    id: 'vn-takumar-55-18',
+    name: 'S-M-C Takumar 55mm f/1.8',
+    nickname: 'Street Sharp Razor',
+    base: 'Vietnam',
+    mount: 'M42',
+    focalLength: '55mm',
+    maxAperture: 'f/1.8',
+    filterThread: '49mm',
+    specialFeatures: ['Lớp phủ SMC 7 lớp', 'Kích thước siêu nhỏ gọn', 'Độ tương phản cao'],
+    history:
+      'Một trong những ống kính tiêu chuẩn có lớp tráng phủ SMC 7 lớp đầu tiên trên thế giới. Độ chính xác cơ khí đỉnh cao của Pentax.',
+    strengths:
+      'Vi tương phản cực sắc, độ nét đều từ tâm ra rìa, khả năng chống lóa flare vượt trội hơn hẳn các lens cùng thời.',
+    goldenMilestones:
+      'Nhiếp ảnh đường phố đen trắng, tài liệu phóng sự, dạo phố đêm Sài Gòn / Hà Nội.',
+    recommendedBodies: ['D800E', 'Z5'],
+    recommendedRecipeIds: ['C-8', 'C-10', 'C-4', 'C-14'],
+  },
+  {
     id: 'vn-nikkor-sc-55-12',
     name: 'Nikkor-S.C Auto 55mm f/1.2',
     nickname: 'Nocturnal Spherical Glow',
@@ -102,6 +178,25 @@ export const lensesVault: LensVaultItem[] = [
       'Chân dung đêm ánh nến/đèn đường, cảnh quán bar ấm cúng, ảnh ý niệm nghệ thuật.',
     recommendedBodies: ['Z5', 'D800E'],
     recommendedRecipeIds: ['C-6', 'C-13', 'C-12', 'C-14', 'C-15', 'C-18'],
+  },
+  {
+    id: 'vn-fujinon-55-18-ebc',
+    name: 'Fujinon 55mm f/1.8 EBC',
+    nickname: '11-Layer Coating Wizard',
+    base: 'Vietnam',
+    mount: 'M42',
+    focalLength: '55mm',
+    maxAperture: 'f/1.8',
+    filterThread: '49mm',
+    specialFeatures: ['Lớp phủ điện tử EBC 11 lớp', 'Màu xanh lục ngọc Fuji đặc trưng', 'Ngàm M42'],
+    history:
+      'Trang bị công nghệ tráng phủ chùm tia điện tử (Electron Beam Coating - EBC) 11 lớp tối tân nhất của Fujifilm giúp triệt tiêu phản xạ và tối ưu độ trong suốt.',
+    strengths:
+      'Tái tạo sắc xanh lá cây (Fuji greens) và sắc trời trong trẻo tuyệt mỹ, độ tương phản trong veo không đục màu.',
+    goldenMilestones:
+      'Phong cảnh thiên nhiên, chụp rừng cây trong nắng sớm, chân dung màu film pastel.',
+    recommendedBodies: ['Z5', 'D800E'],
+    recommendedRecipeIds: ['C-3', 'C-10', 'C-1', 'C-15'],
   },
   {
     id: 'vn-tamron-90-25-52b',
@@ -194,101 +289,6 @@ export const lensesVault: LensVaultItem[] = [
     },
   },
   {
-    id: 'vn-nikon-35-70-35-ais',
-    name: 'Nikon 35-70mm f/3.5 AI-S',
-    nickname: 'Constant Aperture Studio Zoom',
-    base: 'Vietnam',
-    mount: 'F-mount (AI-S)',
-    focalLength: '35-70mm',
-    maxAperture: 'f/3.5',
-    filterThread: '62mm',
-    specialFeatures: ['Khẩu cố định f/3.5', 'Chế độ Macro switch @ 70mm', 'Thân kim loại nặng'],
-    history:
-      'Ống kính zoom tiêu chuẩn chuyên nghiệp của Nikon đầu thập niên 80, được các studio và tạp chí thời bấy giờ tin cậy nhờ chất lượng quang học ngang ngửa ống fix.',
-    strengths:
-      'Độ tương phản cao, hình ảnh chắc nịch, chuyển vùng sắc nét ổn định toàn dải tiêu cự.',
-    goldenMilestones:
-      'Chụp sự kiện gia đình, dạo phố đa dụng, tĩnh vật và món ăn góc chụp cận cảnh.',
-    recommendedBodies: ['D750', 'Z5'],
-    recommendedRecipeIds: ['C-1', 'C-4', 'C-11'],
-  },
-  {
-    id: 'vn-tokina-28-70-pro1-duo',
-    name: 'Tokina AT-X PRO 28-70mm f/2.8 Đời 1 (Angénieux Twin #1 & #2)',
-    nickname: 'Bản Angénieux Cặp đôi song sinh',
-    base: 'Vietnam',
-    mount: 'F-mount (Screw-drive AF)',
-    focalLength: '28-70mm',
-    maxAperture: 'f/2.8',
-    filterThread: '77mm',
-    specialFeatures: ['Công thức quang học Angénieux Pháp', 'Vỏ nhám sần Pro Heavy-duty', 'Cặp đôi sao lưu 2 Body'],
-    history:
-      'Sở hữu công thức quang học mua bản quyền từ huyền thoại điện ảnh Angénieux 28-70mm f/2.6 của Pháp. Thấu kính thủy tinh đúc trứ danh tạo nên chất màu điện ảnh vô đối. Cặp đôi gồm 2 Unit sao lưu chiến lược để tác chiến song song 2 body (D750 & Z5).',
-    strengths:
-      'Tông màu ấm mật ong nồng nàn, chuyển vùng highlight êm dịu không gắt, flare dạng vòng cung điện ảnh ấm áp, độ bền cơ học nồi đồng cối đá.',
-    goldenMilestones:
-      'Quay phim/chụp ảnh cưới phong cách điện ảnh, chân dung hoàng hôn, phóng sự tiệc tác chiến đa góc máy.',
-    recommendedBodies: ['Z5', 'D750'],
-    recommendedRecipeIds: ['C-1', 'C-16', 'C-3', 'C-2', 'C-11', 'C-14'],
-  },
-  {
-    id: 'vn-tamron-180-25-ld',
-    name: 'Tamron SP 180mm f/2.5 LD (IF) 35th Anniversary (Model 63B)',
-    nickname: 'Nordic Velvet Tele Master',
-    base: 'Vietnam',
-    mount: 'Adaptall-2 (to Nikon F / Z)',
-    focalLength: '180mm',
-    maxAperture: 'f/2.5',
-    filterThread: '77mm',
-    specialFeatures: ['Thấu kính tán xạ thấp LD', 'Lấy nét trong (IF)', 'Kỷ niệm 35 năm Tamron'],
-    history:
-      'Tuyệt phẩm quang học sản xuất giới hạn kỷ niệm 35 năm thành lập Tamron (1985). Được đánh giá là một trong những ống tele 180mm sắc nét nhất từng được chế tạo.',
-    strengths:
-      'Hoàn toàn không có viền tím (CA-free) nhờ thấu kính LD, độ tách bạch không gian 3D kinh ngạc, bokeh nhung mịn như tranh vẽ.',
-    goldenMilestones:
-      'Chân dung nén phối cảnh tầm xa, cô lập chủ thể giữa thiên nhiên, phong cảnh đồi núi.',
-    recommendedBodies: ['D800E', 'Z5', 'D750'],
-    recommendedRecipeIds: ['C-7', 'C-13', 'C-9'],
-  },
-  {
-    id: 'vn-nikon-80-200-28-pushpull',
-    name: 'Nikon AF 80-200mm f/2.8 ED (Đời 2 Push-Pull)',
-    nickname: 'Classic Tele Workhorse',
-    base: 'Vietnam',
-    mount: 'F-mount (Screw-drive AF)',
-    focalLength: '80-200mm',
-    maxAperture: 'f/2.8',
-    filterThread: '77mm',
-    specialFeatures: ['Cơ chế đẩy kéo Push-Pull nhanh', 'Kính ED cao cấp', 'AF trục vít tốc độ cao'],
-    history:
-      'Ống kính tele zoom huyền thoại của phóng viên thể thao và sự kiện thập niên 90. Thân máy kim loại đúc nguyên khối siêu bền.',
-    strengths:
-      'Độ nét và độ tương phản cực kỳ ấn tượng ngay tại f/2.8, màu sắc trong trẻo, bắt trọn chuyển động từ xa.',
-    goldenMilestones:
-      'Sự kiện thể thao, tiệc cưới ngoài trời, chân dung sân khấu và biểu diễn.',
-    recommendedBodies: ['D750', 'D800E'],
-    recommendedRecipeIds: ['C-2', 'C-4', 'C-11'],
-  },
-  {
-    id: 'vn-fujinon-55-18-ebc',
-    name: 'Fujinon 55mm f/1.8 EBC',
-    nickname: '11-Layer Coating Wizard',
-    base: 'Vietnam',
-    mount: 'M42',
-    focalLength: '55mm',
-    maxAperture: 'f/1.8',
-    filterThread: '49mm',
-    specialFeatures: ['Lớp phủ điện tử EBC 11 lớp', 'Màu xanh lục ngọc Fuji đặc trưng', 'Ngàm M42'],
-    history:
-      'Trang bị công nghệ tráng phủ chùm tia điện tử (Electron Beam Coating - EBC) 11 lớp tối tân nhất của Fujifilm giúp triệt tiêu phản xạ và tối ưu độ trong suốt.',
-    strengths:
-      'Tái tạo sắc xanh lá cây (Fuji greens) và sắc trời trong trẻo tuyệt mỹ, độ tương phản trong veo không đục màu.',
-    goldenMilestones:
-      'Phong cảnh thiên nhiên, chụp rừng cây trong nắng sớm, chân dung màu film pastel.',
-    recommendedBodies: ['Z5', 'D800E'],
-    recommendedRecipeIds: ['C-3', 'C-10', 'C-1', 'C-15'],
-  },
-  {
     id: 'vn-czj-sonnar-135-35-mc',
     name: 'Carl Zeiss Jena Sonnar 135mm f/3.5 MC (Chữ đỏ)',
     nickname: 'German Red Letter Sharpness',
@@ -306,25 +306,6 @@ export const lensesVault: LensVaultItem[] = [
       'Chân dung nghệ thuật đặc tả, kiến trúc chi tiết, ảnh đen trắng fine-art.',
     recommendedBodies: ['D800E', 'D750'],
     recommendedRecipeIds: ['C-17', 'C-10', 'C-9', 'C-13'],
-  },
-  {
-    id: 'vn-czj-flektogon-35-24-mc-1q',
-    name: 'Carl Zeiss Jena Flektogon 35mm f/2.4 MC (Chữ đỏ Fullbox 1Q)',
-    nickname: 'The Legendary 19cm Close-Focus 1Q',
-    base: 'Vietnam',
-    mount: 'M42',
-    focalLength: '35mm',
-    maxAperture: 'f/2.4',
-    filterThread: '49mm',
-    specialFeatures: ['Lấy nét siêu gần 19cm', 'Chứng chỉ chất lượng cao nhất 1Q', 'MC Red Letter'],
-    history:
-      'Ống kính 35mm được tôn sùng nhất của hệ M42. Khoảng cách lấy nét tối thiểu chỉ 19cm biến nó thành một ống kính nửa góc rộng, nửa macro cực kỳ độc đáo.',
-    strengths:
-      'Hiệu ứng phối cảnh phóng đại góc gần ngoạn mục, màu sắc rực rỡ đậm đà kiểu Zeiss, độ nét cực cao toàn dải.',
-    goldenMilestones:
-      'Street life cận cảnh, hoa lá macro góc rộng, nội thất cổ kính và ẩm thực.',
-    recommendedBodies: ['D800E', 'Z5'],
-    recommendedRecipeIds: ['C-17', 'C-4', 'C-5', 'C-8', 'C-15'],
   },
   {
     id: 'vn-nikon-nikkor-q-135-28',
@@ -364,11 +345,49 @@ export const lensesVault: LensVaultItem[] = [
     recommendedBodies: ['Z5', 'D750'],
     recommendedRecipeIds: ['C-6', 'C-1', 'C-8'],
   },
+  {
+    id: 'vn-tamron-180-25-ld',
+    name: 'Tamron SP 180mm f/2.5 LD (IF) 35th Anniversary (Model 63B)',
+    nickname: 'Nordic Velvet Tele Master',
+    base: 'Vietnam',
+    mount: 'Adaptall-2 (to Nikon F / Z)',
+    focalLength: '180mm',
+    maxAperture: 'f/2.5',
+    filterThread: '77mm',
+    specialFeatures: ['Thấu kính tán xạ thấp LD', 'Lấy nét trong (IF)', 'Kỷ niệm 35 năm Tamron'],
+    history:
+      'Tuyệt phẩm quang học sản xuất giới hạn kỷ niệm 35 năm thành lập Tamron (1985). Được đánh giá là một trong những ống tele 180mm sắc nét nhất từng được chế tạo.',
+    strengths:
+      'Hoàn toàn không có viền tím (CA-free) nhờ thấu kính LD, độ tách bạch không gian 3D kinh ngạc, bokeh nhung mịn như tranh vẽ.',
+    goldenMilestones:
+      'Chân dung nén phối cảnh tầm xa, cô lập chủ thể giữa thiên nhiên, phong cảnh đồi núi.',
+    recommendedBodies: ['D800E', 'Z5', 'D750'],
+    recommendedRecipeIds: ['C-7', 'C-13', 'C-9'],
+  },
+  {
+    id: 'vn-nikon-80-200-28-pushpull',
+    name: 'Nikon AF 80-200mm f/2.8 ED (Đời 2 Push-Pull)',
+    nickname: 'Classic Tele Workhorse',
+    base: 'Vietnam',
+    mount: 'F-mount (Screw-drive AF)',
+    focalLength: '80-200mm',
+    maxAperture: 'f/2.8',
+    filterThread: '77mm',
+    specialFeatures: ['Cơ chế đẩy kéo Push-Pull nhanh', 'Kính ED cao cấp', 'AF trục vít tốc độ cao'],
+    history:
+      'Ống kính tele zoom huyền thoại của phóng viên thể thao và sự kiện thập niên 90. Thân máy kim loại đúc nguyên khối siêu bền.',
+    strengths:
+      'Độ nét và độ tương phản cực kỳ ấn tượng ngay tại f/2.8, màu sắc trong trẻo, bắt trọn chuyển động từ xa.',
+    goldenMilestones:
+      'Sự kiện thể thao, tiệc cưới ngoài trời, chân dung sân khấu và biểu diễn.',
+    recommendedBodies: ['D750', 'D800E'],
+    recommendedRecipeIds: ['C-2', 'C-4', 'C-11'],
+  },
 
   // =========================================================================
-  // BASE PHẦN LAN (11 ỐNG KÍNH)
+  // BASE PHẦN LAN (13 ỐNG KÍNH - SẮP XẾP TỪ WIDE ĐẾN TELE)
   // =========================================================================
-   {
+  {
     id: 'fi-nikon-24-f28d',
     name: 'Nikon AF NIKKOR 24mm f/2.8D',
     nickname: 'Nordic Pocket Classic / Stealth Street Prime',
@@ -393,23 +412,23 @@ export const lensesVault: LensVaultItem[] = [
     recommendedRecipeIds: ['C-8', 'C-10', 'C-14', 'C-4', 'C-1'],
   },
   {
-    id: 'fi-minolta-md-50-17-rokkor',
-    name: 'Minolta MD 50mm f/1.7 Rokkor (Chữ đỏ)',
-    nickname: 'Warm Tonal Honey Master',
+    id: 'fi-nikon-24-120-f4g-vr',
+    name: 'Nikon AF-S NIKKOR 24-120mm f/4G ED VR',
+    nickname: 'Nordic Expedition All-in-One',
     base: 'Finland',
-    mount: 'MD (qua ngàm chuyển MD-Z/MD-NEX)',
-    focalLength: '50mm',
-    maxAperture: 'f/1.7',
-    filterThread: '49mm',
-    specialFeatures: ['Chữ đỏ Rokkor', 'Lớp tráng phủ Achromatic Coating', 'Trọng lượng siêu nhẹ'],
+    mount: 'F-mount (AF-S G VR)',
+    focalLength: '24-120mm',
+    maxAperture: 'f/4.0',
+    filterThread: '77mm',
+    specialFeatures: ['Lớp phủ Nano Crystal Coat', 'Chống rung VR thế hệ 2', 'Dải tiêu cự đa năng 5x'],
     history:
-      'Dòng lens Rokkor danh tiếng của Minolta với lớp phủ độc quyền hai lớp Achromatic, nguồn cảm hứng trực tiếp cho công thức màu C-1 trong cẩm nang.',
+      'Ống kính zoom du hành việt dã cao cấp của Nikon trang bị lớp phủ Nano chống lóa và chống rung quang học VR mạnh mẽ.',
     strengths:
-      'Tông da ấm mật ong tuyệt hảo, vùng chuyển nét mịn màng không gắt, kích thước nhỏ gọn lý tưởng mang đi du hành Bắc Âu.',
+      'Đa năng tuyệt đối từ góc rộng 24mm đến tele 120mm, khẩu cố định f/4, màu sắc trong trẻo tương phản cao.',
     goldenMilestones:
-      'Chân dung ánh sáng tự nhiên Bắc Âu, ảnh dạo phố mùa thu lá vàng, chân dung cafe sưởi ấm.',
-    recommendedBodies: ['Z5'],
-    recommendedRecipeIds: ['C-1', 'C-3', 'C-11'],
+      'Chuyến thám hiểm Bắc Cực, trekking rừng thông tuyết Phần Lan, ảnh phong cảnh đa biến.',
+    recommendedBodies: ['D750', 'D800E', 'Z5'],
+    recommendedRecipeIds: ['C-3', 'C-4', 'C-10'],
   },
   {
     id: 'fi-samyang-35-14-umc',
@@ -429,6 +448,25 @@ export const lensesVault: LensVaultItem[] = [
       'Chụp đêm tuyết mùa đông Bắc Âu, chụp bầu trời sao cực quang (Aurora), chân dung môi trường điện ảnh.',
     recommendedBodies: ['D800E', 'Z5'],
     recommendedRecipeIds: ['C-3', 'C-4', 'C-6'],
+  },
+  {
+    id: 'fi-minolta-md-50-17-rokkor',
+    name: 'Minolta MD 50mm f/1.7 Rokkor (Chữ đỏ)',
+    nickname: 'Warm Tonal Honey Master',
+    base: 'Finland',
+    mount: 'MD (qua ngàm chuyển MD-Z/MD-NEX)',
+    focalLength: '50mm',
+    maxAperture: 'f/1.7',
+    filterThread: '49mm',
+    specialFeatures: ['Chữ đỏ Rokkor', 'Lớp tráng phủ Achromatic Coating', 'Trọng lượng siêu nhẹ'],
+    history:
+      'Dòng lens Rokkor danh tiếng của Minolta với lớp phủ độc quyền hai lớp Achromatic, nguồn cảm hứng trực tiếp cho công thức màu C-1 trong cẩm nang.',
+    strengths:
+      'Tông da ấm mật ong tuyệt hảo, vùng chuyển nét mịn màng không gắt, kích thước nhỏ gọn lý tưởng mang đi du hành Bắc Âu.',
+    goldenMilestones:
+      'Chân dung ánh sáng tự nhiên Bắc Âu, ảnh dạo phố mùa thu lá vàng, chân dung cafe sưởi ấm.',
+    recommendedBodies: ['Z5'],
+    recommendedRecipeIds: ['C-1', 'C-3', 'C-11'],
   },
   {
     id: 'fi-sigma-50-14-ex-dg',
@@ -507,6 +545,25 @@ export const lensesVault: LensVaultItem[] = [
     recommendedRecipeIds: ['C-2', 'C-11', 'C-8'],
   },
   {
+    id: 'fi-tokina-af-90-28-macro',
+    name: 'Tokina AT-X AF 90mm f/2.8 Macro (Fullbox kèm Tube 1:1 & Bao da Zin)',
+    nickname: 'Chiến thần Macro Tuyết Bắc Âu / Tokina AF 90 Macro',
+    base: 'Finland',
+    mount: 'Nikon F-mount (qua FTZ trên Z5)',
+    focalLength: '90mm',
+    maxAperture: 'f/2.8',
+    filterThread: '55mm',
+    specialFeatures: ['Bản kế thừa Bokina huyền thoại', 'Fullbox Tube Extender 1:1 & Bao da Zin', 'Trường nét phẳng Flat-Field'],
+    history:
+      'Bản kế thừa tự động hóa (AF) huyền thoại dòng AT-X Pro đầu thập niên 90 từ tiền bối Bokina, hoàn thiện chuẩn sưu tầm Fullbox kèm Macro Extender 1:1 và bao da gin xách tay từ Nhật Bản.',
+    strengths:
+      'Độ nét vi mô cực đỉnh, trường nét phẳng tuyệt đối, bokeh mịn mượt như nhung không viền sắc; phóng đại 1:1 siêu chi tiết khi gắn tube zin.',
+    goldenMilestones:
+      'Tinh thể băng tuyết mùa đông Bắc Âu, côn trùng & hoa dại mùa hè Phần Lan, chân dung đặc tả chiều sâu con ngươi và ánh mắt.',
+    recommendedBodies: ['Z5', 'D800E', 'D750'],
+    recommendedRecipeIds: ['C-5', 'C-20', 'C-10', 'C-15'],
+  },
+  {
     id: 'fi-nikon-105-25-ais',
     name: 'Nikon Nikkor 105mm f/2.5 AI-S',
     nickname: 'Afghan Girl Legendary Optics',
@@ -545,25 +602,6 @@ export const lensesVault: LensVaultItem[] = [
     recommendedRecipeIds: ['C-1', 'C-3', 'C-7'],
   },
   {
-    id: 'fi-nikon-24-120-f4g-vr',
-    name: 'Nikon AF-S NIKKOR 24-120mm f/4G ED VR',
-    nickname: 'Nordic Expedition All-in-One',
-    base: 'Finland',
-    mount: 'F-mount (AF-S G VR)',
-    focalLength: '24-120mm',
-    maxAperture: 'f/4.0',
-    filterThread: '77mm',
-    specialFeatures: ['Lớp phủ Nano Crystal Coat', 'Chống rung VR thế hệ 2', 'Dải tiêu cự đa năng 5x'],
-    history:
-      'Ống kính zoom du hành việt dã cao cấp của Nikon trang bị lớp phủ Nano chống lóa và chống rung quang học VR mạnh mẽ.',
-    strengths:
-      'Đa năng tuyệt đối từ góc rộng 24mm đến tele 120mm, khẩu cố định f/4, màu sắc trong trẻo tương phản cao.',
-    goldenMilestones:
-      'Chuyến thám hiểm Bắc Cực, trekking rừng thông tuyết Phần Lan, ảnh phong cảnh đa biến.',
-    recommendedBodies: ['D750', 'D800E', 'Z5'],
-    recommendedRecipeIds: ['C-3', 'C-4', 'C-10'],
-  },
-  {
     id: 'fi-nikon-70-210-f4-auto',
     name: 'Nikon AF Nikkor 70-210mm f/4 Auto',
     nickname: 'Beercan Constant F4',
@@ -600,43 +638,5 @@ export const lensesVault: LensVaultItem[] = [
       'Chụp dạo vườn bách thảo mùa hè Phần Lan, hoa tuyết mùa đông, chân dung tự nhiên.',
     recommendedBodies: ['Z5', 'D750'],
     recommendedRecipeIds: ['C-1', 'C-5', 'C-3'],
-  },
-  {
-    id: 'fi-tokina-af-90-28-macro',
-    name: 'Tokina AT-X AF 90mm f/2.8 Macro (Fullbox kèm Tube 1:1 & Bao da Zin)',
-    nickname: 'Chiến thần Macro Tuyết Bắc Âu / Tokina AF 90 Macro',
-    base: 'Finland',
-    mount: 'Nikon F-mount (qua FTZ trên Z5)',
-    focalLength: '90mm',
-    maxAperture: 'f/2.8',
-    filterThread: '55mm',
-    specialFeatures: ['Bản kế thừa Bokina huyền thoại', 'Fullbox Tube Extender 1:1 & Bao da Zin', 'Trường nét phẳng Flat-Field'],
-    history:
-      'Bản kế thừa tự động hóa (AF) huyền thoại dòng AT-X Pro đầu thập niên 90 từ tiền bối Bokina, hoàn thiện chuẩn sưu tầm Fullbox kèm Macro Extender 1:1 và bao da gin xách tay từ Nhật Bản.',
-    strengths:
-      'Độ nét vi mô cực đỉnh, trường nét phẳng tuyệt đối, bokeh mịn mượt như nhung không viền sắc; phóng đại 1:1 siêu chi tiết khi gắn tube zin.',
-    goldenMilestones:
-      'Tinh thể băng tuyết mùa đông Bắc Âu, côn trùng & hoa dại mùa hè Phần Lan, chân dung đặc tả chiều sâu con ngươi và ánh mắt.',
-    recommendedBodies: ['Z5', 'D800E', 'D750'],
-    recommendedRecipeIds: ['C-5', 'C-20', 'C-10', 'C-15'],
-  },
-  {
-    id: 'vn-industar-61-lz',
-    name: 'Industar-61 L/Z 50mm f/2.8 MC',
-    nickname: 'Soviet Star Bokeh & Lanthanum Crystal Macro',
-    base: 'Vietnam',
-    mount: 'M42 (kèm Extension Tube Macro sang Nikon Z / F)',
-    focalLength: '50mm',
-    maxAperture: 'f/2.8',
-    filterThread: '49mm',
-    specialFeatures: ['Lá khẩu ngôi sao 6 cánh (f/4-f/5.6)', 'Thấu kính chứa tinh thể Lanthanum', 'Tráng phủ MC đa tầng', 'Macro siêu cận cảnh'],
-    history:
-      'Ống kính huyền thoại độc nhất vô nhị của Liên Xô (nhà máy LZOS). Sử dụng thủy tinh pha tinh thể nguyên tố đất hiếm Lanthanum nhằm gia tăng chiết suất và độ phân giải vi mô quang học. Cơ chế lá khẩu tạo hình ngôi sao 6 cánh sắc nét độc quyền.',
-    strengths:
-      'Tạo hiệu ứng bokeh ngôi sao 6 cánh lung linh khi khép f/4 - f/5.6, bokeh tròn bong bóng tại f/2.8. Khi kết hợp cùng ống nối macro (Extension Tube M42 - Z), ống kính biến thành cỗ máy macro siêu thực phóng đại chi tiết cận cảnh ấn tượng.',
-    goldenMilestones:
-      'Macro hoa cỏ, giọt sương sớm, tĩnh vật vi mô, bắt ven sáng đèn trang trí tạo bokeh ngôi sao vintage.',
-    recommendedBodies: ['Z5', 'D800E'],
-    recommendedRecipeIds: ['C-19', 'C-5', 'C-15', 'C-4'],
   },
 ];
