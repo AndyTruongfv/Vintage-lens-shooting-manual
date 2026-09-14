@@ -573,4 +573,23 @@ export const lensesVault: LensVaultItem[] = [
     recommendedBodies: ['Z5', 'D800E', 'D750'],
     recommendedRecipeIds: ['C-5', 'C-10', 'C-15'],
   },
+  {
+    id: 'vn-industar-61-lz',
+    name: 'Industar-61 L/Z 50mm f/2.8 MC',
+    nickname: 'Soviet Star Bokeh & Lanthanum Crystal Macro',
+    base: 'Vietnam',
+    mount: 'M42 (kèm Extension Tube Macro sang Nikon Z / F)',
+    focalLength: '50mm',
+    maxAperture: 'f/2.8',
+    filterThread: '49mm',
+    specialFeatures: ['Lá khẩu ngôi sao 6 cánh (f/4-f/5.6)', 'Thấu kính chứa tinh thể Lanthanum', 'Tráng phủ MC đa tầng', 'Macro siêu cận cảnh'],
+    history:
+      'Ống kính huyền thoại độc nhất vô nhị của Liên Xô (nhà máy LZOS). Sử dụng thủy tinh pha tinh thể nguyên tố đất hiếm Lanthanum nhằm gia tăng chiết suất và độ phân giải vi mô quang học. Cơ chế lá khẩu tạo hình ngôi sao 6 cánh sắc nét độc quyền.',
+    strengths:
+      'Tạo hiệu ứng bokeh ngôi sao 6 cánh lung linh khi khép f/4 - f/5.6, bokeh tròn bong bóng tại f/2.8. Khi kết hợp cùng ống nối macro (Extension Tube M42 - Z), ống kính biến thành cỗ máy macro siêu thực phóng đại chi tiết cận cảnh ấn tượng.',
+    goldenMilestones:
+      'Macro hoa cỏ, giọt sương sớm, tĩnh vật vi mô, bắt ven sáng đèn trang trí tạo bokeh ngôi sao vintage.',
+    recommendedBodies: ['Z5', 'D800E'],
+    recommendedRecipeIds: ['C-19', 'C-5', 'C-15', 'C-4'],
+  },
 ];

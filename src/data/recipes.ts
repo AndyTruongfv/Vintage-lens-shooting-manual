@@ -469,5 +469,31 @@ export const recipes: Recipe[] = [
     },
     recommendedBodies: ['Z5'],
   },
+  {
+    id: 'C-19',
+    name: 'Starry Bubble Dream (Industar-61 L/Z)',
+    tag: 'Macro / Star Bokeh / Vintage Lanthanum',
+    category: 'Landscape/Macro',
+    baseProfile: 'Standard',
+    lensMatch: 'Industar-61 L/Z 50mm f/2.8 M42 (+ Extension Tube M42-Nikon Z)',
+    scenario: 'Mô phỏng hiệu ứng bokeh ngôi sao 6 cánh sắc nét độc quyền từ lá khẩu đặc biệt kết hợp tinh thể Lanthanum Liên Xô. Kết hợp cùng ống nối macro (extension tube) để phóng đại chủ thể siêu cận cảnh và tối đa hóa các đốm sáng hình học lung linh.',
+    parameters: {
+      sharpening: '+3.5',
+      midSharpening: '+1.5',
+      clarity: '+1.0',
+      contrast: '+0.5',
+      highlights: '-1.0',
+      shadows: '+0.5',
+      saturation: '+1.0',
+      hue: '0.0',
+    },
+    wb: {
+      base: 'Auto 1 (Bảo toàn không khí) hoặc Daylight (5200K)',
+      amber: '+0.75 (ấm áp hoài cổ)',
+      magenta: '+0.25 (trong trẻo, khử ám vàng gắt)',
+      note: 'Khép khẩu f/4 đến f/5.6 để kích hoạt tối đa hiệu ứng bokeh hình ngôi sao 6 cánh; mở f/2.8 khi cần hiệu ứng bong bóng tròn mềm mại. Tận dụng Extension Tube (ống nối macro M42 - Nikon Z) để tiến sát chủ thể, kết hợp nguồn sáng điểm hậu cảnh qua tán lá/đèn trang trí tạo độ tách lớp không gian ấn tượng.',
+    },
+    recommendedBodies: ['Z5', 'D800E'],
+  },
 ];
 

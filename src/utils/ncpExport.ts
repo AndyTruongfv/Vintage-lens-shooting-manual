@@ -154,6 +154,14 @@ export const recipeNcpMetaMap: Record<string, RecipeNcpMeta> = {
     recommendedLenses: 'Nikkor 55mm f/1.2 (FTZ), Minolta PG Rokkor 58mm f/1.2',
     wbSummary: 'Direct Kelvin (5500K) | Amber +0.5, Magenta +0.75',
   },
+  'C-19': {
+    filename: 'C19_Industar61_StarBubble.NCP',
+    slotName: 'STARBUBBLE',
+    lensDescriptor: 'Industar-61 L/Z',
+    tacticalMission: 'Hiệu ứng bokeh ngôi sao 6 cánh sắc nét và đốm sáng bong bóng từ lá khẩu đặc biệt & tinh thể Lanthanum Liên Xô, tối ưu macro siêu cận cảnh.',
+    recommendedLenses: 'Industar-61 L/Z 50mm f/2.8 M42 (+ Extension Tube M42-Nikon Z)',
+    wbSummary: 'Auto 1 / Daylight (5200K) | Amber +0.75, Magenta +0.25',
+  },
 };
 
 export function getRecipeNcpMeta(recipe: Recipe): RecipeNcpMeta {
