@@ -106,5 +106,16 @@ export interface LensVaultItem {
   dcFieldGuide?: DCFieldGuide;
 }
 
+export interface LensPurchaseInfo {
+  lens_id: string;
+  price?: string | null;
+  seller?: string | null;
+  purchase_date?: string | null;
+  notes?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+
 
 

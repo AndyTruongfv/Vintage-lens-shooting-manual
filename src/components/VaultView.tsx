@@ -1,24 +1,57 @@
 import { useState, useMemo } from 'react';
-import { Download, Search, Sparkles, Camera, Aperture, Compass, Tag, Check, Award, Eye, FileText, ChevronRight } from 'lucide-react';
-import type { LensVaultItem, LensLocation, CameraBody } from '../types';
+import {
+  Download,
+  Search,
+  Sparkles,
+  Camera,
+  Aperture,
+  Compass,
+  Tag,
+  Check,
+  Award,
+  Eye,
+  FileText,
+  ChevronRight,
+  DollarSign,
+  Cloud,
+  CloudOff,
+} from 'lucide-react';
+import type { LensVaultItem, LensLocation, CameraBody, LensPurchaseInfo } from '../types';
 import { lensesVault } from '../data/lenses';
 import { recipes } from '../data/recipes';
 import { downloadVaultCatalog } from '../utils/exportCatalog';
 import { LensDossierModal } from './LensDossierModal';
+import { LensPurchaseModal } from './LensPurchaseModal';
 
 interface VaultViewProps {
   onSelectRecipe: (recipeId: string) => void;
   onSelectBody?: (body: CameraBody) => void;
+  purchases?: Record<string, LensPurchaseInfo>;
+  onSavePurchase?: (info: LensPurchaseInfo) => Promise<{ success: boolean; isCloud: boolean; error?: string }>;
+  onDeletePurchase?: (lensId: string) => Promise<{ success: boolean }>;
+  onRefreshPurchases?: () => Promise<void>;
+  isCloudConnected?: boolean;
 }
 
-export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
+export function VaultView({
+  onSelectRecipe,
+  onSelectBody,
+  purchases = {},
+  onSavePurchase,
+  onDeletePurchase,
+  onRefreshPurchases,
+  isCloudConnected = false,
+}: VaultViewProps) {
   const [baseFilter, setBaseFilter] = useState<'All' | LensLocation>('All');
   const [search, setSearch] = useState('');
   const [downloaded, setDownloaded] = useState(false);
   const [selectedLensForDossier, setSelectedLensForDossier] = useState<LensVaultItem | null>(null);
+  const [selectedLensForPurchase, setSelectedLensForPurchase] = useState<LensVaultItem | null>(null);
 
   const vnCount = useMemo(() => lensesVault.filter((l) => l.base === 'Vietnam').length, []);
   const fiCount = useMemo(() => lensesVault.filter((l) => l.base === 'Finland').length, []);
+  const purchaseCount = useMemo(() => Object.keys(purchases).length, [purchases]);
+
 
   const filteredLenses = useMemo(() => {
     const query = search.toLowerCase().trim();
@@ -137,8 +170,8 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
         </div>
       </section>
 
-      {/* Result counter */}
-      <div className="flex items-center justify-between px-1">
+      {/* Result counter & Purchase Stats */}
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
         <p className="font-mono text-xs font-semibold text-ink-subtle">
           Hiển thị <span className="font-bold text-ink">{filteredLenses.length}</span> / {lensesVault.length} ống kính
           {baseFilter !== 'All' && (
@@ -147,6 +180,27 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
             </span>
           )}
         </p>
+
+        {/* Purchase Info count & Cloud badge */}
+        <div className="flex items-center gap-2">
+          {purchaseCount > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300">
+              <Tag size={10} />
+              <span>Đã lưu giá: {purchaseCount}/{lensesVault.length} lens</span>
+            </span>
+          )}
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[10px] font-bold ${
+              isCloudConnected
+                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                : 'bg-paper-card text-ink-subtle border border-paper-border'
+            }`}
+            title={isCloudConnected ? 'Supabase Cloud Sync đang hoạt động' : 'Chế độ lưu trữ Offline'}
+          >
+            {isCloudConnected ? <Cloud size={11} className="text-emerald-500" /> : <CloudOff size={11} />}
+            <span>{isCloudConnected ? 'Cloud Sync' : 'Offline Mode'}</span>
+          </span>
+        </div>
       </div>
 
       {/* Lens Cards Grid */}
@@ -154,6 +208,9 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
         <div className="grid grid-cols-1 gap-4">
           {filteredLenses.map((lens: LensVaultItem, index: number) => {
             const isVN = lens.base === 'Vietnam';
+            const purchase = purchases[lens.id];
+            const hasPurchaseData = Boolean(purchase && (purchase.price || purchase.seller || purchase.notes));
+
             return (
               <article
                 key={lens.id}
@@ -202,6 +259,37 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
                       <span className="font-mono text-xs font-extrabold text-accent">
                         {lens.focalLength} · {lens.maxAperture}
                       </span>
+
+                      {/* [P] Purchase Info Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLensForPurchase(lens);
+                        }}
+                        className={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1 font-mono text-[11px] font-bold transition-all duration-200 active:scale-95 shadow-xs ${
+                          hasPurchaseData
+                            ? 'border border-amber-500/40 bg-amber-500/15 text-amber-900 dark:text-amber-300 ring-1 ring-amber-500/30 hover:bg-amber-500/25'
+                            : 'border border-paper-border bg-paper-card text-ink-muted hover:border-accent/40 hover:text-accent hover:bg-accent/10'
+                        }`}
+                        title={
+                          hasPurchaseData
+                            ? `Giá: ${purchase?.price || 'N/A'} - Người bán: ${purchase?.seller || 'N/A'}`
+                            : `Thêm thông tin mua hàng cho ${lens.name}`
+                        }
+                        aria-label={`Thông tin mua hàng ${lens.name}`}
+                      >
+                        <span className="font-extrabold text-amber-600 dark:text-amber-400">[P]</span>
+                        {purchase?.price ? (
+                          <span className="text-[10px] font-extrabold truncate max-w-[85px]">
+                            {purchase.price}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] hidden sm:inline">Mua hàng</span>
+                        )}
+                      </button>
+
+                      {/* Dossier Button */}
                       <span className="hidden sm:inline-flex items-center gap-1 rounded-xl border border-accent/25 bg-accent/10 px-2.5 py-1 font-mono text-[10px] font-extrabold text-accent group-hover:bg-accent group-hover:text-paper transition-all">
                         <Eye size={12} />
                         <span>Hồ sơ Dossier ➔</span>
@@ -226,10 +314,10 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
 
                 {/* Body Content */}
                 <div className="p-4 sm:p-5 space-y-3.5">
-                  {/* Special Features tags */}
-                  {lens.specialFeatures && lens.specialFeatures.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {lens.specialFeatures.map((feat) => (
+                  {/* Special Features tags & Purchase snapshot */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {lens.specialFeatures &&
+                      lens.specialFeatures.map((feat) => (
                         <span
                           key={feat}
                           className="inline-flex items-center gap-1 rounded-lg border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300"
@@ -238,8 +326,26 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
                           {feat}
                         </span>
                       ))}
-                    </div>
-                  )}
+
+                    {/* Quick Purchase Info Tag if present */}
+                    {hasPurchaseData && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedLensForPurchase(lens);
+                        }}
+                        className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+                        title="Bấm để xem/chỉnh sửa chi tiết mua hàng"
+                      >
+                        <DollarSign size={10} />
+                        <span>
+                          {purchase?.price ? `Giá: ${purchase.price}` : 'Đã có thông tin mua'}
+                          {purchase?.seller ? ` · ${purchase.seller}` : ''}
+                        </span>
+                      </button>
+                    )}
+                  </div>
 
                   {/* History */}
                   <p className="text-xs leading-relaxed text-ink-muted line-clamp-3 sm:line-clamp-none">
@@ -352,11 +458,30 @@ export function VaultView({ onSelectRecipe, onSelectBody }: VaultViewProps) {
       {/* Tactical Dossier Modal */}
       <LensDossierModal
         lens={selectedLensForDossier}
+        purchaseInfo={selectedLensForDossier ? purchases[selectedLensForDossier.id] : undefined}
+        onOpenPurchaseModal={(lens) => setSelectedLensForPurchase(lens)}
         isOpen={!!selectedLensForDossier}
         onClose={() => setSelectedLensForDossier(null)}
         onSelectRecipe={onSelectRecipe}
         onSelectBody={onSelectBody}
       />
+
+      {/* [P] Lens Purchase Info Modal */}
+      <LensPurchaseModal
+        lens={selectedLensForPurchase}
+        purchaseInfo={selectedLensForPurchase ? purchases[selectedLensForPurchase.id] : undefined}
+        isOpen={!!selectedLensForPurchase}
+        onClose={() => setSelectedLensForPurchase(null)}
+        onSave={async (info) => {
+          if (onSavePurchase) {
+            return await onSavePurchase(info);
+          }
+          return { success: true, isCloud: false };
+        }}
+        onDelete={onDeletePurchase}
+        onRefresh={onRefreshPurchases}
+      />
     </div>
   );
 }
+

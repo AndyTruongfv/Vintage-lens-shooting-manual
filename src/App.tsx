@@ -17,6 +17,7 @@ import { VaultView } from './components/VaultView';
 import { InstallGuideModal } from './components/InstallGuideModal';
 import { WBGuideModal } from './components/WBGuideModal';
 import { usePWAInstall } from './hooks/usePWAInstall';
+import { useLensPurchases } from './hooks/useLensPurchases';
 
 function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('recipes');
@@ -32,6 +33,14 @@ function App() {
   const [installGuideOpen, setInstallGuideOpen] = useState(false);
 
   const pwa = usePWAInstall();
+  const {
+    purchases,
+    savePurchase,
+    deletePurchase,
+    refreshPurchases,
+    isCloudConnected,
+  } = useLensPurchases();
+
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -251,8 +260,14 @@ function App() {
           <VaultView
             onSelectRecipe={handleSelectRecipeFromOtherTab}
             onSelectBody={handleSelectBodyFromOtherTab}
+            purchases={purchases}
+            onSavePurchase={savePurchase}
+            onDeletePurchase={deletePurchase}
+            onRefreshPurchases={refreshPurchases}
+            isCloudConnected={isCloudConnected}
           />
         ) : activeTab === 'masters' ? (
+
           /* Masters & Trends Tab */
           <MastersView
             onSelectRecipe={handleSelectRecipeFromOtherTab}

@@ -9,13 +9,20 @@ import {
   Tag,
   ArrowRight,
   Crosshair,
+  DollarSign,
+  User,
+  Calendar,
+  FileText,
+  Edit3,
 } from 'lucide-react';
-import type { LensVaultItem, CameraBody } from '../types';
+import type { LensVaultItem, CameraBody, LensPurchaseInfo } from '../types';
 import { recipes } from '../data/recipes';
 import { cameras } from '../data/cameras';
 
 interface LensDossierModalProps {
   lens: LensVaultItem | null;
+  purchaseInfo?: LensPurchaseInfo;
+  onOpenPurchaseModal?: (lens: LensVaultItem) => void;
   isOpen: boolean;
   onClose: () => void;
   onSelectRecipe: (recipeId: string) => void;
@@ -24,11 +31,14 @@ interface LensDossierModalProps {
 
 export function LensDossierModal({
   lens,
+  purchaseInfo,
+  onOpenPurchaseModal,
   isOpen,
   onClose,
   onSelectRecipe,
   onSelectBody,
 }: LensDossierModalProps) {
+
   // Lock body scroll when modal is open and handle ESC key
   useEffect(() => {
     if (!isOpen) return;
@@ -362,6 +372,89 @@ export function LensDossierModal({
                 );
               })}
             </div>
+          </div>
+
+          {/* Section 5: Hồ sơ Mua sắm & Sở hữu (Purchase Info) */}
+          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
+                <DollarSign size={16} />
+                <h4 className="font-mono text-xs font-bold uppercase tracking-wider">
+                  Hồ sơ Mua sắm & Sở hữu (Purchase Info)
+                </h4>
+              </div>
+
+              {onOpenPurchaseModal && (
+                <button
+                  type="button"
+                  onClick={() => onOpenPurchaseModal(lens)}
+                  className="inline-flex items-center gap-1 rounded-xl border border-amber-500/30 bg-amber-500/15 px-2.5 py-1 font-mono text-[11px] font-bold text-amber-900 dark:text-amber-300 hover:bg-amber-500/25 transition-all active:scale-95"
+                >
+                  <Edit3 size={11} />
+                  <span>
+                    {purchaseInfo?.price || purchaseInfo?.seller
+                      ? 'Chỉnh sửa [P]'
+                      : 'Thêm thông tin [P]'}
+                  </span>
+                </button>
+              )}
+            </div>
+
+            {purchaseInfo &&
+            (purchaseInfo.price ||
+              purchaseInfo.seller ||
+              purchaseInfo.purchase_date ||
+              purchaseInfo.notes) ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                    Giá mua
+                  </span>
+                  <p className="font-bold text-ink text-sm">
+                    {purchaseInfo.price || 'Chưa ghi'}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                    Người bán / Nơi mua
+                  </span>
+                  <p className="font-bold text-ink truncate">
+                    {purchaseInfo.seller || 'Chưa ghi'}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                    Ngày mua
+                  </span>
+                  <p className="font-bold text-ink">
+                    {purchaseInfo.purchase_date || 'Chưa ghi'}
+                  </p>
+                </div>
+                {purchaseInfo.notes && (
+                  <div className="sm:col-span-3 rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                    <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                      Ghi chú tình trạng & Phụ kiện
+                    </span>
+                    <p className="text-ink leading-relaxed whitespace-pre-wrap">
+                      {purchaseInfo.notes}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between rounded-xl border border-dashed border-paper-border bg-surface/50 p-3 text-xs text-ink-muted">
+                <span>Chưa lưu giá và nguồn mua cho ống kính này.</span>
+                {onOpenPurchaseModal && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenPurchaseModal(lens)}
+                    className="font-mono text-[11px] font-bold text-accent hover:underline"
+                  >
+                    + Nhập ngay
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

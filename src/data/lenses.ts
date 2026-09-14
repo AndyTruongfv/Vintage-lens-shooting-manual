@@ -23,6 +23,29 @@ export const lensesVault: LensVaultItem[] = [
     recommendedBodies: ['Z5', 'D750'],
     recommendedRecipeIds: ['C-1', 'C-2', 'C-6', 'C-14'],
   },
+   {
+    id: 'vn-nikon-18-35-f35-45g-ed',
+    name: 'Nikon AF-S NIKKOR 18-35mm f/3.5-4.5G ED',
+    nickname: 'Featherweight Ultrawide Explorer',
+    base: 'Vietnam',
+    mount: 'F-mount (AF-S G qua FTZ trên Z5)',
+    focalLength: '18-35mm',
+    maxAperture: 'f/3.5-4.5',
+    filterThread: '77mm',
+    specialFeatures: [
+      '2 Thấu kính ED + 3 Thấu kính phi cầu Aspherical',
+      'Trọng lượng siêu nhẹ chỉ 385g',
+      'Động cơ siêu âm SWM hỗ trợ AF mượt mà trên Z5/FTZ',
+    ],
+    history:
+      'Thế hệ ống kính zoom góc siêu rộng nâng cấp dòng G hiện đại của Nikon, kết hợp thiết kế siêu nhẹ việt dã cùng công nghệ quang học ED tiên tiến, khắc phục hoàn toàn quang sai góc rìa.',
+    strengths:
+      'Độ sắc nét tâm-rìa xuất sắc vượt trội so với trọng lượng, kiểm soát méo và lóa ngược sáng cực tốt, tương thích hoàn hảo với hệ thống chống rung IBIS trên Nikon Z5.',
+    goldenMilestones:
+      'Phong cảnh ruộng bậc thang Tây Bắc, bình minh biển đảo, kiến trúc nội ngoại thất, phơi sáng cầu đường phố đêm.',
+    recommendedBodies: ['Z5', 'D750', 'D800E'],
+    recommendedRecipeIds: ['C-3', 'C-4', 'C-10', 'C-18'],
+  },
   {
     id: 'vn-takumar-55-18',
     name: 'S-M-C Takumar 55mm f/1.8',
@@ -345,6 +368,30 @@ export const lensesVault: LensVaultItem[] = [
   // =========================================================================
   // BASE PHẦN LAN (11 ỐNG KÍNH)
   // =========================================================================
+   {
+    id: 'fi-nikon-24-f28d',
+    name: 'Nikon AF NIKKOR 24mm f/2.8D',
+    nickname: 'Nordic Pocket Classic / Stealth Street Prime',
+    base: 'Finland',
+    mount: 'F-mount (Screw-drive AF trên DSLR / MF Focus Peaking qua FTZ trên Z5)',
+    focalLength: '24mm',
+    maxAperture: 'f/2.8',
+    filterThread: '52mm',
+    specialFeatures: [
+      'Hệ thống thấu kính nổi CRC bù sai số cận cảnh (0.26m)',
+      'Thiết kế bỏ túi siêu gọn nhẹ ~270g',
+      'Chất màu D-Type đậm đà mộc mạc',
+      'Filter size 52mm chuẩn mực vintage',
+    ],
+    history:
+      'Ống kính prime góc rộng kinh điển dòng AF-D của Nikon kế thừa thiết kế quang học huyền thoại từ thời AI-S, tích hợp công nghệ CRC cho chất lượng ảnh đồng đều từ vô cực đến cận cảnh 26cm.',
+    strengths:
+      'Kích thước nhỏ gọn tàng hình cho nhiếp ảnh đường phố, góc nhìn 24mm kể chuyện không gian thoáng đãng mà không méo dị dạng, màu sắc trung thực dày khối.',
+    goldenMilestones:
+      'Dạo phố cổ Helsinki tuyết trắng, cảnh rừng thông mùa thu Bắc Âu (Ruska), tài liệu phóng sự đen trắng, đời thường quán xá ấm cúng.',
+    recommendedBodies: ['D750', 'D800E', 'Z5'],
+    recommendedRecipeIds: ['C-8', 'C-10', 'C-14', 'C-4', 'C-1'],
+  },
   {
     id: 'fi-minolta-md-50-17-rokkor',
     name: 'Minolta MD 50mm f/1.7 Rokkor (Chữ đỏ)',
