@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { LanguageProvider } from './context/LanguageContext';
 
 // Register service worker safely in production if available
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator && import.meta.env.PROD) {
@@ -14,6 +15,9 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator && import.meta
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
   </StrictMode>
 );
+

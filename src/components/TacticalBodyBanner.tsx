@@ -1,5 +1,6 @@
 import { Camera, Aperture, Focus, Zap, Crosshair, Target, Sparkles, CheckCircle2 } from 'lucide-react';
 import type { CameraInfo } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface TacticalBodyBannerProps {
   camera: CameraInfo;
@@ -13,7 +14,9 @@ const iconMap = {
 };
 
 export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
+  const { strings, getLocalizedCamera } = useLanguage();
   const Icon = iconMap[camera.icon as keyof typeof iconMap] ?? Camera;
+  const locCam = getLocalizedCamera(camera);
 
   return (
     <section
@@ -31,10 +34,10 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
               <h2 className="font-mono text-sm font-extrabold tracking-tight text-ink">{camera.label}</h2>
               <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-accent ring-1 ring-accent/30">
                 <CheckCircle2 size={10} />
-                Active Body
+                {strings.activeBodyTag}
               </span>
             </div>
-            <p className="mt-0.5 text-xs font-semibold italic text-ink-muted">{camera.subtitle}</p>
+            <p className="mt-0.5 text-xs font-semibold italic text-ink-muted">{locCam.subtitle}</p>
           </div>
         </div>
 
@@ -55,9 +58,9 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
           </div>
           <div className="min-w-0">
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
-              Thế mạnh cốt lõi (Combat Strengths)
+              {strings.combatStrengthsTitle}
             </h3>
-            <p className="mt-1 text-xs leading-relaxed text-ink">{camera.strengths}</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink">{locCam.strengths}</p>
           </div>
         </div>
 
@@ -68,9 +71,9 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
           </div>
           <div className="min-w-0">
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400">
-              Ngữ cảnh tối ưu (Optimal Shooting)
+              {strings.optimalTacticalUseTitle}
             </h3>
-            <p className="mt-1 text-xs leading-relaxed text-ink">{camera.optimalUse}</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink">{locCam.optimalUse}</p>
           </div>
         </div>
 
@@ -81,7 +84,7 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
           </div>
           <div className="min-w-0">
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-rose-800 dark:text-rose-400">
-              Lens khuyên dùng (Optics Match)
+              {strings.recommendedArsenalTitle}
             </h3>
             <p className="mt-1 text-xs font-medium leading-relaxed text-ink">{camera.recommendedLenses}</p>
           </div>
@@ -94,7 +97,7 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
           </div>
           <div className="min-w-0">
             <h3 className="text-[10px] font-bold uppercase tracking-wider text-accent">
-              Công thức khuyên dùng (Recommended Recipes)
+              {strings.optimalFilmRecipesTitle}
             </h3>
             <p className="mt-1 text-xs font-semibold leading-relaxed text-ink">{camera.recommendedProfiles}</p>
           </div>
@@ -103,4 +106,3 @@ export function TacticalBodyBanner({ camera }: TacticalBodyBannerProps) {
     </section>
   );
 }
-

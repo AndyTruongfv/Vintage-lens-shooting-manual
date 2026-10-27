@@ -13,6 +13,8 @@ import {
   ExternalLink,
   ShieldCheck,
 } from 'lucide-react';
+import { lensesVault } from '../data/lenses';
+import { recipes } from '../data/recipes';
 
 interface InstallGuideModalProps {
   isOpen: boolean;
@@ -394,7 +396,7 @@ export function InstallGuideModal({
                 Sẵn sàng hoạt động ngoại tuyến (100% Offline)
               </h4>
               <p className="text-[11px] leading-relaxed text-ink-muted">
-                Sau khi thêm vào màn hình chính, toàn bộ 13 Picture Control Recipe, 28 ống kính và thông số kỹ thuật đều được lưu trữ trực tiếp trên thiết bị của bạn. Bạn có thể tra cứu thoải mái khi đi rừng, leo núi hoặc ở vùng không có sóng 4G/Wi-Fi.
+                Sau khi thêm vào màn hình chính, toàn bộ {recipes.length} Picture Control Recipe, {lensesVault.length} ống kính và thông số kỹ thuật đều được lưu trữ trực tiếp trên thiết bị của bạn. Bạn có thể tra cứu thoải mái khi đi rừng, leo núi hoặc ở vùng không có sóng 4G/Wi-Fi.
               </p>
             </div>
           </div>

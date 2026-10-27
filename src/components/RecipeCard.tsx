@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Copy, Check, Camera, Sun, Aperture, ChevronDown, ChevronUp, Film, Star, Sparkles, Download } from 'lucide-react';
+import { Copy, Check, Camera, Sun, Aperture, ChevronDown, ChevronUp, Film, Star, Download } from 'lucide-react';
 import type { Recipe, CameraBody } from '../types';
 import { ParameterGrid } from './ParameterGrid';
 import { WBCard } from './WBCard';
 import { NcpExportModal } from './NcpExportModal';
+import { useLanguage } from '../context/LanguageContext';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -11,18 +12,17 @@ interface RecipeCardProps {
   isInitiallyExpanded?: boolean;
 }
 
-function buildCopyText(recipe: Recipe): string {
-
+function buildCopyText(recipe: Recipe, isEn: boolean): string {
   const p = recipe.parameters;
   const lines = [
     `═════════════════════════════════════`,
     `NIKON NCP: [${recipe.id}] ${recipe.name}`,
-    `Thể loại: ${recipe.category} | ${recipe.tag}`,
+    `${isEn ? 'Category' : 'Thể loại'}: ${recipe.category} | ${recipe.tag}`,
     `Base Profile: ${recipe.baseProfile}`,
-    `Lens khuyên dùng: ${recipe.lensMatch}`,
-    `Bối cảnh: ${recipe.scenario}`,
+    `${isEn ? 'Recommended Lens' : 'Lens khuyên dùng'}: ${recipe.lensMatch}`,
+    `${isEn ? 'Scenario' : 'Bối cảnh'}: ${isEn && recipe.scenarioEn ? recipe.scenarioEn : recipe.scenario}`,
     `─────────────────────────────────────`,
-    `[THÔNG SỐ PICTURE CONTROL]`,
+    `[${isEn ? 'PICTURE CONTROL PARAMETERS' : 'THÔNG SỐ PICTURE CONTROL'}]`,
     `• Quick Sharp / Sharpening: ${p.sharpening}`,
     `• Mid-Range Sharpening: ${p.midSharpening}`,
     `• Clarity: ${p.clarity}`,
@@ -36,11 +36,11 @@ function buildCopyText(recipe: Recipe): string {
   if (p.toning !== undefined) lines.push(`• Toning: ${p.toning}`);
   lines.push(
     `─────────────────────────────────────`,
-    `[WHITE BALANCE FINE-TUNE]`,
-    `• Base WB: ${recipe.wb.base}`,
-    `• Trục Amber-Blue (A-B): ${recipe.wb.amber}`,
-    `• Trục Green-Magenta (G-M): ${recipe.wb.magenta}`,
-    `• Ghi chú: ${recipe.wb.note}`,
+    `[${isEn ? 'WHITE BALANCE FINE-TUNE' : 'CÂN BẰNG TRẮNG WHITE BALANCE'}]`,
+    `• Base WB: ${isEn && recipe.wb.baseEn ? recipe.wb.baseEn : recipe.wb.base}`,
+    `• ${isEn ? 'Amber-Blue Axis (A-B)' : 'Trục Amber-Blue (A-B)'}: ${recipe.wb.amber}`,
+    `• ${isEn ? 'Green-Magenta Axis (G-M)' : 'Trục Green-Magenta (G-M)'}: ${recipe.wb.magenta}`,
+    `• ${isEn ? 'Note' : 'Ghi chú'}: ${isEn && recipe.wb.noteEn ? recipe.wb.noteEn : recipe.wb.note}`,
     `═════════════════════════════════════`
   );
   return lines.join('\n');
@@ -76,11 +76,13 @@ function isBWRecipe(recipe: Recipe): boolean {
 }
 
 export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = false }: RecipeCardProps) {
+  const { lang, strings, t } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(isInitiallyExpanded);
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const catStyle = getCategoryStyle(recipe.category);
   const isBW = isBWRecipe(recipe);
+  const isEn = lang === 'en';
 
   // Sync expanded if isInitiallyExpanded changes
   useEffect(() => {
@@ -90,7 +92,7 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
   }, [isInitiallyExpanded]);
 
   const handleCopy = async () => {
-    const text = buildCopyText(recipe);
+    const text = buildCopyText(recipe, isEn);
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
@@ -109,7 +111,6 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
-      // fallback copy
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     }
@@ -149,7 +150,7 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
                 {recommendedBody && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2.5 py-0.5 font-mono text-[10px] font-bold text-accent ring-1 ring-accent/30 animate-pulse">
                     <Star size={10} className="fill-accent" />
-                    ★ Đề xuất cho Nikon {recommendedBody}
+                    {t('recommendedForBody', { body: recommendedBody })}
                   </span>
                 )}
               </div>
@@ -170,7 +171,7 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
                 title="Tải riêng file Picture Control (.NCP) này cho máy ảnh"
               >
                 <Download size={14} />
-                <span>Tải .NCP</span>
+                <span>{strings.downloadNcpBtn}</span>
               </button>
 
               {/* Copy Recipe Button */}
@@ -181,11 +182,11 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
                     ? 'bg-emerald-600 text-white shadow-emerald-500/20'
                     : 'border border-accent/25 bg-accent/10 text-accent hover:bg-accent hover:text-paper'
                 }`}
-                aria-label={copied ? 'Đã sao chép' : 'Sao chép nhanh công thức'}
-                title="Sao chép nhanh toàn bộ thông số vào Clipboard"
+                aria-label={copied ? strings.copiedBtn : strings.copyBtn}
+                title="Sao chép toàn bộ thông số vào Clipboard"
               >
                 {copied ? <Check size={14} className="stroke-[3]" /> : <Copy size={14} />}
-                <span>{copied ? 'Đã chép!' : 'Copy'}</span>
+                <span>{copied ? strings.copiedBtn : strings.copyBtn}</span>
               </button>
             </div>
           </div>
@@ -194,7 +195,7 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
           <div className="mt-3 flex items-center gap-2">
             <div className="flex items-center gap-1 text-ink-subtle">
               <Camera size={13} />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider">Base Profile:</span>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider">{strings.baseProfileLabel}</span>
             </div>
             <span className="rounded-md border border-paper-border bg-surface px-2 py-0.5 font-mono text-xs font-bold text-ink">
               {recipe.baseProfile}
@@ -210,7 +211,7 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
               <div className="flex items-center gap-2">
                 <Aperture size={14} className="text-rose-600 dark:text-rose-400" />
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wide text-rose-800 dark:text-rose-400">
-                  Optics Match (Ống kính khuyên dùng)
+                  {strings.opticsMatchLabel}
                 </h4>
               </div>
               <p className="mt-1.5 text-xs font-semibold leading-relaxed text-ink">{recipe.lensMatch}</p>
@@ -221,19 +222,21 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
               <div className="flex items-center gap-2">
                 <Sun size={14} className="text-amber-600 dark:text-amber-400" />
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wide text-amber-800 dark:text-amber-400">
-                  Bối cảnh & Ánh sáng tối ưu
+                  {strings.scenarioLabel}
                 </h4>
               </div>
-              <p className="mt-1.5 text-xs font-medium leading-relaxed text-ink">{recipe.scenario}</p>
+              <p className="mt-1.5 text-xs font-medium leading-relaxed text-ink">
+                {isEn && recipe.scenarioEn ? recipe.scenarioEn : recipe.scenario}
+              </p>
             </div>
 
             {/* Parameters */}
             <div>
               <div className="mb-2 flex items-center justify-between">
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wide text-ink-muted">
-                  Thông số Picture Control (NCP Parameters)
+                  {strings.ncpParamsLabel}
                 </h4>
-                <span className="font-mono text-[10px] text-ink-subtle">Thang đo -5.0 → +5.0</span>
+                <span className="font-mono text-[10px] text-ink-subtle">{strings.scaleRange}</span>
               </div>
               <ParameterGrid params={recipe.parameters} />
             </div>
@@ -251,11 +254,11 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
         >
           {expanded ? (
             <>
-              <span>Thu gọn chi tiết</span> <ChevronUp size={14} />
+              <span>{strings.collapseDetails}</span> <ChevronUp size={14} />
             </>
           ) : (
             <>
-              <span>Xem chi tiết thông số & White Balance</span> <ChevronDown size={14} />
+              <span>{strings.viewDetails}</span> <ChevronDown size={14} />
             </>
           )}
         </button>
@@ -270,4 +273,3 @@ export function RecipeCard({ recipe, recommendedBody, isInitiallyExpanded = fals
     </>
   );
 }
-

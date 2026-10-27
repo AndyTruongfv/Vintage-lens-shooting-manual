@@ -10,14 +10,12 @@ import {
   ArrowRight,
   Crosshair,
   DollarSign,
-  User,
-  Calendar,
-  FileText,
   Edit3,
 } from 'lucide-react';
-import type { LensVaultItem, CameraBody, LensPurchaseInfo } from '../types';
+import type { LensVaultItem, CameraBody, LensPurchaseInfo, Language } from '../types';
 import { recipes } from '../data/recipes';
 import { cameras } from '../data/cameras';
+import { useLanguage } from '../context/LanguageContext';
 
 interface LensDossierModalProps {
   lens: LensVaultItem | null;
@@ -38,6 +36,7 @@ export function LensDossierModal({
   onSelectRecipe,
   onSelectBody,
 }: LensDossierModalProps) {
+  const { lang, strings, getLocalizedLens } = useLanguage();
 
   // Lock body scroll when modal is open and handle ESC key
   useEffect(() => {
@@ -60,8 +59,10 @@ export function LensDossierModal({
   if (!isOpen || !lens) return null;
 
   const isVN = lens.base === 'Vietnam';
+  const isEn = lang === 'en';
+  const loc = getLocalizedLens(lens);
 
-  const getBodyRationale = (body: CameraBody, item: LensVaultItem): string => {
+  const getBodyRationale = (body: CameraBody, item: LensVaultItem, currentLang: Language): string => {
     const isManual =
       item.mount.includes('M42') ||
       item.mount.includes('MD') ||
@@ -79,6 +80,40 @@ export function LensDossierModal({
       item.name.includes('AF') ||
       item.name.includes('DC-Nikkor');
 
+    if (currentLang === 'en') {
+      if (body === 'Z5') {
+        if (isMacro) {
+          return '5-Axis IBIS keeps macro frames rock-steady + 100% EVF magnification and Focus Peaking nail focus on individual ice crystals or pollen filaments.';
+        }
+        if (isManual) {
+          return 'Ultimate mirrorless synergy: 5-axis IBIS eliminates camera shake + Focus Peaking & electronic EVF zoom make manual focusing razor sharp.';
+        }
+        return 'Leverages crisp EVF, silent electronic shutter eliminating vibration, and limitless adapter adaptability via FTZ / M42-Z / MD-Z.';
+      }
+
+      if (body === 'D800E') {
+        if (
+          item.strengths.toLowerCase().includes('vi mô') ||
+          item.strengths.toLowerCase().includes('vi tương phản') ||
+          item.strengths.toLowerCase().includes('dao cạo') ||
+          item.strengths.toLowerCase().includes('nét')
+        ) {
+          return '36.3MP sensor without OLPF extracts maximum micro-contrast and micro-detail resolve from this optical design.';
+        }
+        return 'Ultra-wide dynamic range of 36.3MP beautifully resolves subtle gradations and tonal transitions of vintage glass.';
+      }
+
+      if (body === 'D750') {
+        if (isAF) {
+          return 'High-torque internal screw-drive AF motor with 51-point AF system locking focus down to -3 EV in dim candlelight.';
+        }
+        return 'Balanced 24MP sensor rendering natural, flattering skin tones with exceptional high ISO grain control for candid moments.';
+      }
+
+      return 'Harmonious optical balance matching vintage glass characteristics with Nikon full-frame sensor.';
+    }
+
+    // Vietnamese rationale
     if (body === 'Z5') {
       if (isMacro) {
         return 'Chống rung IBIS 5 trục giữ khung hình siêu ổn định ở cự ly cận cảnh + Zoom 100% EVF và Focus Peaking lấy nét chuẩn xác từng sợi nhụy/tinh thể băng.';
@@ -146,11 +181,11 @@ export function LensDossierModal({
                   }`}
                 >
                   <span>{isVN ? '🇻🇳' : '🇫🇮'}</span>
-                  <span>{isVN ? 'Việt Nam Base' : 'Phần Lan Base'}</span>
+                  <span>{isVN ? strings.vnBaseTag : strings.fiBaseTag}</span>
                 </span>
 
                 <span className="rounded-md border border-paper-border bg-paper-card px-2 py-0.5 text-ink">
-                  {lens.mount}
+                  {loc.mount}
                 </span>
 
                 <span className="rounded-md bg-accent/15 px-2 py-0.5 text-accent font-extrabold">
@@ -159,7 +194,7 @@ export function LensDossierModal({
 
                 {lens.filterThread && (
                   <span className="rounded-md bg-surface px-2 py-0.5 text-ink-subtle">
-                    Filter ⌀{lens.filterThread}
+                    {strings.filterSizePrefix}{lens.filterThread}
                   </span>
                 )}
               </div>
@@ -173,7 +208,7 @@ export function LensDossierModal({
               </h3>
               <p className="text-xs sm:text-sm font-semibold italic text-accent flex items-center gap-1.5">
                 <Crosshair size={13} className="shrink-0" />
-                <span>"{lens.nickname}"</span>
+                <span>"{loc.nickname}"</span>
               </p>
             </div>
 
@@ -181,7 +216,7 @@ export function LensDossierModal({
             <button
               onClick={onClose}
               className="absolute right-4 top-4 rounded-full border border-paper-border bg-paper-card p-2 text-ink-muted transition-colors hover:border-accent hover:bg-accent/10 hover:text-ink active:scale-95"
-              aria-label="Đóng hồ sơ"
+              aria-label={strings.closeDossier}
             >
               <X size={18} />
             </button>
@@ -191,9 +226,9 @@ export function LensDossierModal({
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 space-y-5">
           {/* Special Features tags */}
-          {lens.specialFeatures && lens.specialFeatures.length > 0 && (
+          {loc.specialFeatures && loc.specialFeatures.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
-              {lens.specialFeatures.map((feat) => (
+              {loc.specialFeatures.map((feat) => (
                 <span
                   key={feat}
                   className="inline-flex items-center gap-1 rounded-lg border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 font-mono text-[11px] font-bold text-amber-800 dark:text-amber-300"
@@ -210,11 +245,11 @@ export function LensDossierModal({
             <div className="flex items-center gap-2 text-ink mb-2">
               <BookOpen size={16} className="text-accent" />
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-accent">
-                Di sản & Lịch sử hình thành (Heritage & Story)
+                {strings.heritageTitle}
               </h4>
             </div>
             <p className="text-xs sm:text-sm leading-relaxed text-ink-muted">
-              {lens.history}
+              {loc.history}
             </p>
           </div>
 
@@ -223,11 +258,11 @@ export function LensDossierModal({
             <div className="flex items-center gap-2 text-teal-800 dark:text-teal-300 mb-2">
               <Aperture size={16} />
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider">
-                Thế mạnh quang học vượt trội (Optical Signature)
+                {strings.opticalTitle}
               </h4>
             </div>
             <p className="text-xs sm:text-sm leading-relaxed text-ink">
-              {lens.strengths}
+              {loc.strengths}
             </p>
           </div>
 
@@ -244,7 +279,7 @@ export function LensDossierModal({
               {/* DC Ring Nature */}
               <div className="rounded-xl border border-paper-border/80 bg-surface/70 p-3 space-y-1.5 text-xs">
                 <p className="font-mono text-[11px] font-bold text-ink flex items-center gap-1">
-                  <span>⚙️ Bản chất vận hành vòng DC:</span>
+                  <span>⚙️ {isEn ? 'DC Ring Operating Principle:' : 'Bản chất vận hành vòng DC:'}</span>
                 </p>
                 <ul className="space-y-1 text-ink-muted pl-1">
                   {lens.dcFieldGuide.dcRingPrinciple.map((principle, idx) => (
@@ -259,7 +294,7 @@ export function LensDossierModal({
               {/* 3 Golden Steps */}
               <div className="space-y-2">
                 <p className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-amber-900 dark:text-amber-200">
-                  🎯 3 Bước tác chiến thực địa chuẩn xác:
+                  🎯 {isEn ? '3 Precise Field Operations Steps:' : '3 Bước tác chiến thực địa chuẩn xác:'}
                 </p>
                 <div className="grid grid-cols-1 gap-2">
                   {lens.dcFieldGuide.goldenRules.map((rule) => (
@@ -286,7 +321,7 @@ export function LensDossierModal({
                         </span>
                         {rule.isCrucial && (
                           <span className="rounded bg-red-600 px-1.5 py-0.5 font-mono text-[9px] font-extrabold uppercase text-white">
-                            Lưu ý sống còn
+                            {isEn ? 'CRUCIAL NOTE' : 'Lưu ý sống còn'}
                           </span>
                         )}
                       </div>
@@ -302,7 +337,7 @@ export function LensDossierModal({
               <div className="rounded-xl border border-accent/30 bg-accent/10 p-3 text-xs leading-relaxed text-ink space-y-1">
                 <p className="font-mono text-[11px] font-bold text-accent flex items-center gap-1">
                   <Sparkles size={13} />
-                  <span>Mẹo điện ảnh (Hollywood Dreamy Glow):</span>
+                  <span>{isEn ? 'Hollywood Dreamy Glow Tip:' : 'Mẹo điện ảnh (Hollywood Dreamy Glow):'}</span>
                 </p>
                 <p className="text-ink-muted leading-relaxed">
                   {lens.dcFieldGuide.cinemaGlowTip}
@@ -316,11 +351,11 @@ export function LensDossierModal({
             <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 mb-2">
               <Award size={16} />
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider">
-                Khoảnh khắc vàng thực chiến (Golden Milestones)
+                {strings.goldenMilestonesTitle}
               </h4>
             </div>
             <p className="text-xs sm:text-sm font-semibold leading-relaxed text-ink">
-              {lens.goldenMilestones}
+              {loc.goldenMilestones}
             </p>
           </div>
 
@@ -329,14 +364,14 @@ export function LensDossierModal({
             <div className="flex items-center gap-2 text-accent">
               <Camera size={16} />
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider">
-                Khuyến nghị ghép Thân máy (Recommended Body Matching)
+                {strings.bodyMatchTitle}
               </h4>
             </div>
 
             <div className="grid grid-cols-1 gap-2.5">
               {lens.recommendedBodies.map((body) => {
                 const camInfo = cameras.find((c) => c.body === body);
-                const rationale = getBodyRationale(body, lens);
+                const rationale = getBodyRationale(body, lens, lang);
 
                 return (
                   <div
@@ -349,7 +384,7 @@ export function LensDossierModal({
                           Nikon {body}
                         </span>
                         <span className="text-[11px] font-semibold text-ink-subtle">
-                          {camInfo ? `${camInfo.subtitle} (${camInfo.sensor})` : ''}
+                          {camInfo ? `${isEn ? camInfo.subtitleEn || camInfo.subtitle : camInfo.subtitle} (${camInfo.sensor})` : ''}
                         </span>
                       </div>
                       <p className="text-xs leading-relaxed text-ink-muted">
@@ -365,7 +400,7 @@ export function LensDossierModal({
                         }}
                         className="self-start sm:self-center shrink-0 rounded-lg border border-accent/20 bg-accent/10 px-2.5 py-1 font-mono text-[10px] font-bold text-accent hover:bg-accent hover:text-paper transition-all"
                       >
-                        Chọn Body
+                        {strings.chooseBodyBtn}
                       </button>
                     )}
                   </div>
@@ -380,7 +415,7 @@ export function LensDossierModal({
               <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
                 <DollarSign size={16} />
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wider">
-                  Hồ sơ Mua sắm & Sở hữu (Purchase Info)
+                  {strings.purchaseSectionTitle}
                 </h4>
               </div>
 
@@ -393,8 +428,8 @@ export function LensDossierModal({
                   <Edit3 size={11} />
                   <span>
                     {purchaseInfo?.price || purchaseInfo?.seller
-                      ? 'Chỉnh sửa [P]'
-                      : 'Thêm thông tin [P]'}
+                      ? strings.editPurchaseBtn
+                      : strings.addPurchaseBtn}
                   </span>
                 </button>
               )}
@@ -408,32 +443,32 @@ export function LensDossierModal({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                 <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
                   <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    Giá mua
+                    {strings.pricePaidLabel}
                   </span>
                   <p className="font-bold text-ink text-sm">
-                    {purchaseInfo.price || 'Chưa ghi'}
+                    {purchaseInfo.price || strings.notRecorded}
                   </p>
                 </div>
                 <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
                   <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    Người bán / Nơi mua
+                    {strings.sellerLabel}
                   </span>
                   <p className="font-bold text-ink truncate">
-                    {purchaseInfo.seller || 'Chưa ghi'}
+                    {purchaseInfo.seller || strings.notRecorded}
                   </p>
                 </div>
                 <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
                   <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    Ngày mua
+                    {strings.dateLabel}
                   </span>
                   <p className="font-bold text-ink">
-                    {purchaseInfo.purchase_date || 'Chưa ghi'}
+                    {purchaseInfo.purchase_date || strings.notRecorded}
                   </p>
                 </div>
                 {purchaseInfo.notes && (
                   <div className="sm:col-span-3 rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
                     <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                      Ghi chú tình trạng & Phụ kiện
+                      {strings.notesLabel}
                     </span>
                     <p className="text-ink leading-relaxed whitespace-pre-wrap">
                       {purchaseInfo.notes}
@@ -443,14 +478,14 @@ export function LensDossierModal({
               </div>
             ) : (
               <div className="flex items-center justify-between rounded-xl border border-dashed border-paper-border bg-surface/50 p-3 text-xs text-ink-muted">
-                <span>Chưa lưu giá và nguồn mua cho ống kính này.</span>
+                <span>{strings.unrecordedPurchase}</span>
                 {onOpenPurchaseModal && (
                   <button
                     type="button"
                     onClick={() => onOpenPurchaseModal(lens)}
                     className="font-mono text-[11px] font-bold text-accent hover:underline"
                   >
-                    + Nhập ngay
+                    {strings.enterNowBtn}
                   </button>
                 )}
               </div>
@@ -464,7 +499,7 @@ export function LensDossierModal({
           <div className="flex flex-wrap items-center gap-2">
             <span className="flex items-center gap-1 font-mono text-xs font-bold text-accent">
               <Sparkles size={14} />
-              <span>Áp dụng Recipe:</span>
+              <span>{strings.applyRecipePrefix}</span>
             </span>
 
             <div className="flex flex-wrap gap-1.5">
@@ -478,7 +513,7 @@ export function LensDossierModal({
                       onSelectRecipe(recipeId);
                     }}
                     className="group inline-flex items-center gap-1.5 rounded-xl border border-accent/30 bg-accent text-paper px-3 py-1.5 font-mono text-xs font-bold transition-all hover:bg-accent/90 hover:scale-105 active:scale-95 shadow-xs"
-                    title={`Mở công thức [${recipeId}] ${r?.name || ''}`}
+                    title={`Open recipe [${recipeId}] ${r?.name || ''}`}
                   >
                     <span className="font-extrabold">{recipeId}</span>
                     {r && (
@@ -498,7 +533,7 @@ export function LensDossierModal({
             onClick={onClose}
             className="w-full sm:w-auto rounded-xl border border-paper-border bg-paper-card px-4 py-2 font-mono text-xs font-bold text-ink-muted hover:border-accent hover:text-ink transition-colors text-center"
           >
-            Đóng hồ sơ
+            {strings.closeDossier}
           </button>
         </div>
       </div>

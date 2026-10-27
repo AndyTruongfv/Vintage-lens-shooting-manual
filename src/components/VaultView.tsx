@@ -10,7 +10,6 @@ import {
   Check,
   Award,
   Eye,
-  FileText,
   ChevronRight,
   DollarSign,
   Cloud,
@@ -22,6 +21,7 @@ import { recipes } from '../data/recipes';
 import { downloadVaultCatalog } from '../utils/exportCatalog';
 import { LensDossierModal } from './LensDossierModal';
 import { LensPurchaseModal } from './LensPurchaseModal';
+import { useLanguage } from '../context/LanguageContext';
 
 interface VaultViewProps {
   onSelectRecipe: (recipeId: string) => void;
@@ -37,10 +37,10 @@ export type FocalRangeKey = 'all' | 'wide' | '35mm' | '50_55mm' | 'portrait_macr
 
 interface FocalGroupMeta {
   id: FocalRangeKey;
-  label: string;
-  badge: string;
-  shortLabel: string;
-  tagline: string;
+  labelKey: string;
+  badgeKey: string;
+  shortLabelKey: string;
+  taglineKey: string;
   icon: string;
   matcher: (focal: string) => boolean;
 }
@@ -48,49 +48,54 @@ interface FocalGroupMeta {
 export const FOCAL_GROUPS: FocalGroupMeta[] = [
   {
     id: 'all',
-    label: 'Tất cả tiêu cự',
-    badge: 'Toàn bộ kho',
-    shortLabel: 'Tất cả',
-    tagline: 'Toàn bộ 31 ống kính',
+    labelKey: 'focalGroupAll',
+    badgeKey: 'focalGroupAll',
+    shortLabelKey: 'filterAll',
+    taglineKey: 'focalGroupAllTagline',
     icon: '🌐',
     matcher: () => true,
   },
   {
     id: 'wide',
-    label: 'Góc siêu rộng & Rộng (< 35mm)',
-    badge: '< 35mm',
-    shortLabel: 'Góc rộng (<35mm)',
-    tagline: '18-35mm, 24mm, 28-70mm, 24-120mm',
+    labelKey: 'focalGroupWide',
+    badgeKey: '< 35mm',
+    shortLabelKey: 'focalGroupWideShort',
+    taglineKey: 'focalGroupWideTagline',
     icon: '🏔️',
     matcher: (focal: string) =>
       focal.includes('18-35') || focal.includes('24mm') || focal.includes('28-70') || focal.includes('24-120'),
   },
   {
     id: '35mm',
-    label: 'Tiêu cự 35mm Kinh điển',
-    badge: '35mm',
-    shortLabel: '35mm',
-    tagline: 'Flektogon 35/2.4, Samyang 35/1.4, 35-70mm...',
+    labelKey: 'focalGroup35',
+    badgeKey: '35mm',
+    shortLabelKey: 'focalGroup35Short',
+    taglineKey: 'focalGroup35Tagline',
     icon: '🚶',
     matcher: (focal: string) =>
       focal.includes('35mm') || focal.includes('18-35') || focal.includes('35-70') || focal.includes('28-70') || focal.includes('24-120'),
   },
   {
     id: '50_55mm',
-    label: 'Tiêu chuẩn 50mm & 55mm',
-    badge: '50 - 55mm',
-    shortLabel: '50mm - 55mm',
-    tagline: 'Takumar, Nikkor-S.C, Industar, Minolta, Sigma...',
+    labelKey: 'focalGroup50',
+    badgeKey: '50 - 58mm',
+    shortLabelKey: 'focalGroup50Short',
+    taglineKey: 'focalGroup50Tagline',
     icon: '🎯',
     matcher: (focal: string) =>
-      focal.includes('50mm') || focal.includes('55mm') || focal.includes('35-70') || focal.includes('28-70') || focal.includes('24-120'),
+      focal.includes('50mm') ||
+      focal.includes('55mm') ||
+      focal.includes('58mm') ||
+      focal.includes('35-70') ||
+      focal.includes('28-70') ||
+      focal.includes('24-120'),
   },
   {
     id: 'portrait_macro',
-    label: 'Chân dung & Macro (85mm - 105mm)',
-    badge: '85 - 105mm',
-    shortLabel: '85mm - 105mm',
-    tagline: 'AF 85/1.8D, Tamron 90 Macro x2, Tokina 90, Nikkor 105/2.5...',
+    labelKey: 'focalGroupPortrait',
+    badgeKey: '85 - 105mm',
+    shortLabelKey: 'focalGroupPortraitShort',
+    taglineKey: 'focalGroupPortraitTagline',
     icon: '🌸',
     matcher: (focal: string) =>
       focal.includes('85mm') ||
@@ -103,10 +108,10 @@ export const FOCAL_GROUPS: FocalGroupMeta[] = [
   },
   {
     id: 'telephoto',
-    label: 'Telephoto Tầm xa (≥ 135mm)',
-    badge: '≥ 135mm',
-    shortLabel: 'Tele (≥135mm)',
-    tagline: 'DC 135mm, Sonnar 135, Nikkor-Q 135, Tamron 180, Zoom 80-200...',
+    labelKey: 'focalGroupTele',
+    badgeKey: '≥ 135mm',
+    shortLabelKey: 'focalGroupTeleShort',
+    taglineKey: 'focalGroupTeleTagline',
     icon: '🔭',
     matcher: (focal: string) =>
       focal.includes('135mm') ||
@@ -126,6 +131,7 @@ export function VaultView({
   onRefreshPurchases,
   isCloudConnected = false,
 }: VaultViewProps) {
+  const { lang, strings, t, getLocalizedLens } = useLanguage();
   const [baseFilter, setBaseFilter] = useState<'All' | LensLocation>('All');
   const [focalFilter, setFocalFilter] = useState<FocalRangeKey>('all');
   const [showMatrix, setShowMatrix] = useState(true);
@@ -138,20 +144,22 @@ export function VaultView({
   const fiCount = useMemo(() => lensesVault.filter((l) => l.base === 'Finland').length, []);
   const purchaseCount = useMemo(() => Object.keys(purchases).length, [purchases]);
 
-  // Dynamic focal distribution metrics
+  // Dynamic focal distribution metrics with localized labels
   const focalStats = useMemo(() => {
     return FOCAL_GROUPS.map((grp) => {
       const vn = lensesVault.filter((l) => l.base === 'Vietnam' && grp.matcher(l.focalLength)).length;
       const fi = lensesVault.filter((l) => l.base === 'Finland' && grp.matcher(l.focalLength)).length;
       const total = lensesVault.filter((l) => grp.matcher(l.focalLength)).length;
+      const shortLabel = (strings[grp.shortLabelKey as keyof typeof strings] as string) || grp.shortLabelKey;
       return {
         ...grp,
+        shortLabel,
         vn,
         fi,
         total,
       };
     });
-  }, []);
+  }, [strings]);
 
   const filteredLenses = useMemo(() => {
     const query = search.toLowerCase().trim();
@@ -167,19 +175,25 @@ export function VaultView({
         if (!activeFocalGroup.matcher(lens.focalLength)) return false;
       }
 
-      // 3. Search query
+      // 3. Search query (matches both VI and EN fields)
       if (!query) return true;
 
       const haystack = [
         lens.name,
         lens.nickname,
+        lens.nicknameEn || '',
         lens.mount,
+        lens.mountEn || '',
         lens.focalLength,
         lens.maxAperture,
         lens.history,
+        lens.historyEn || '',
         lens.strengths,
+        lens.strengthsEn || '',
         lens.goldenMilestones,
+        lens.goldenMilestonesEn || '',
         ...(lens.specialFeatures || []),
+        ...(lens.specialFeaturesEn || []),
       ]
         .join(' ')
         .toLowerCase();
@@ -189,10 +203,15 @@ export function VaultView({
   }, [baseFilter, focalFilter, search]);
 
   const handleExport = () => {
-    downloadVaultCatalog();
+    downloadVaultCatalog(lang);
     setDownloaded(true);
     setTimeout(() => setDownloaded(false), 2500);
   };
+
+  const activeFocalMeta = FOCAL_GROUPS.find((g) => g.id === focalFilter);
+  const activeFocalLabel = activeFocalMeta
+    ? (strings[activeFocalMeta.shortLabelKey as keyof typeof strings] as string) || activeFocalMeta.shortLabelKey
+    : '';
 
   return (
     <div className="space-y-5 pb-16 animate-fade-in">
@@ -203,14 +222,14 @@ export function VaultView({
             <div className="flex items-center gap-2 text-accent">
               <Compass size={20} className="stroke-[2.2]" />
               <span className="font-mono text-xs font-extrabold uppercase tracking-wider">
-                The Optical Vault & Arsenal
+                {strings.vaultHeaderTag}
               </span>
             </div>
             <h2 className="mt-2 text-lg sm:text-xl font-extrabold tracking-tight text-ink">
-              Bộ Sưu Tập {lensesVault.length} Ống Kính Vintage Huyền Thoại
+              {t('vaultTitle', { count: lensesVault.length })}
             </h2>
             <p className="mt-1 text-xs sm:text-sm leading-relaxed text-ink-muted">
-              Kho vũ khí quang học được phân bổ tại 2 căn cứ chiến lược: <strong>Việt Nam ({vnCount} lens)</strong> và <strong>Phần Lan ({fiCount} lens)</strong>.
+              {t('vaultSubtitle', { vn: vnCount, fi: fiCount })}
             </p>
           </div>
 
@@ -221,11 +240,11 @@ export function VaultView({
                 ? 'bg-emerald-600 text-white ring-2 ring-emerald-400'
                 : 'border border-accent/30 bg-accent text-paper hover:bg-accent/90'
             }`}
-            title="Tải xuống tài liệu Markdown danh mục ống kính & cẩm nang bảo dưỡng"
-            aria-label="Xuất danh mục lưu trữ"
+            title="Download Markdown catalog & maintenance guide"
+            aria-label={strings.exportCatalogBtn}
           >
             {downloaded ? <Check size={16} className="stroke-[3]" /> : <Download size={16} />}
-            <span>{downloaded ? 'Đã tải xuống .md!' : 'Xuất Catalog (.md)'}</span>
+            <span>{downloaded ? strings.exportCatalogSuccess : strings.exportCatalogBtn}</span>
           </button>
         </div>
 
@@ -239,7 +258,7 @@ export function VaultView({
                 : 'border border-paper-border bg-paper-card text-ink-muted hover:border-accent/40 hover:text-ink'
             }`}
           >
-            <span>Tất cả vị trí ({lensesVault.length})</span>
+            <span>{t('locAll', { count: lensesVault.length })}</span>
           </button>
 
           <button
@@ -251,7 +270,7 @@ export function VaultView({
             }`}
           >
             <span className="text-sm">🇻🇳</span>
-            <span>Việt Nam Base ({vnCount})</span>
+            <span>{t('locVn', { count: vnCount })}</span>
           </button>
 
           <button
@@ -263,31 +282,31 @@ export function VaultView({
             }`}
           >
             <span className="text-sm">🇫🇮</span>
-            <span>Phần Lan Base ({fiCount})</span>
+            <span>{t('locFi', { count: fiCount })}</span>
           </button>
 
           <button
             onClick={() => setShowMatrix((prev) => !prev)}
             className="ml-auto flex items-center gap-1 text-[11px] font-mono font-bold text-accent hover:underline px-2 py-1 rounded-lg hover:bg-accent/10 transition-colors"
           >
-            <span>{showMatrix ? 'Thu gọn bảng tiêu cự' : 'Xem bảng tổng kết tiêu cự'}</span>
+            <span>{showMatrix ? strings.toggleMatrixCollapse : strings.toggleMatrixExpand}</span>
           </button>
         </div>
 
-        {/* Interactive Focal Matrix Summary Cards / Table */}
+        {/* Interactive Focal Matrix Summary Cards */}
         {showMatrix && (
           <div className="mt-4 rounded-2xl border border-paper-border/80 bg-surface/90 p-3 sm:p-4 transition-all">
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-1.5 text-ink font-bold text-xs">
                 <span>📊</span>
-                <span>Bảng Tổng Kết Phân Bổ Tiêu Cự (Nhấn để lọc nhanh):</span>
+                <span>{strings.matrixTitle}</span>
               </div>
               {focalFilter !== 'all' && (
                 <button
                   onClick={() => setFocalFilter('all')}
                   className="text-[10px] font-mono font-bold text-accent hover:underline"
                 >
-                  Xóa lọc tiêu cự (Xem tất cả)
+                  {strings.matrixClear}
                 </button>
               )}
             </div>
@@ -312,7 +331,7 @@ export function VaultView({
                           isSelected ? 'bg-white/20 text-white' : 'bg-accent/15 text-accent'
                         }`}
                       >
-                        {item.total} lens
+                        {item.total} {strings.vaultLenses}
                       </span>
                     </div>
                     <div className="mt-1 font-bold text-xs truncate w-full">{item.shortLabel}</div>
@@ -339,7 +358,7 @@ export function VaultView({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Tìm theo tên lens (Takumar, Bokina, Sonnar, 135mm), ngàm (M42, F-mount)..."
+            placeholder={strings.searchPlaceholderVault}
             className="w-full rounded-2xl border border-paper-border bg-paper-card py-2.5 pl-10 pr-4 text-xs sm:text-sm text-ink placeholder-ink-subtle shadow-xs transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           />
         </div>
@@ -349,16 +368,17 @@ export function VaultView({
       <div className="flex flex-wrap items-center justify-between gap-2 px-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-mono text-xs font-semibold text-ink-subtle">
-            Hiển thị <span className="font-bold text-ink">{filteredLenses.length}</span> / {lensesVault.length} ống kính
+            {strings.vaultShowing}{' '}
+            <span className="font-bold text-ink">{filteredLenses.length}</span> / {lensesVault.length} {strings.vaultLenses}
           </p>
           {baseFilter !== 'All' && (
             <span className="rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-bold text-accent">
-              {baseFilter === 'Vietnam' ? '🇻🇳 Base Việt Nam' : '🇫🇮 Base Phần Lan'}
+              {baseFilter === 'Vietnam' ? `🇻🇳 ${strings.vnBaseTag}` : `🇫🇮 ${strings.fiBaseTag}`}
             </span>
           )}
           {focalFilter !== 'all' && (
             <span className="flex items-center gap-1 rounded bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-300">
-              <span>Tiêu cự: {FOCAL_GROUPS.find((g) => g.id === focalFilter)?.shortLabel}</span>
+              <span>{strings.focalFilterPrefix} {activeFocalLabel}</span>
               <button
                 onClick={() => setFocalFilter('all')}
                 className="hover:text-red-500 ml-0.5 text-xs font-black"
@@ -375,7 +395,7 @@ export function VaultView({
           {purchaseCount > 0 && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300">
               <Tag size={10} />
-              <span>Đã lưu giá: {purchaseCount}/{lensesVault.length} lens</span>
+              <span>{t('purchaseCountText', { saved: purchaseCount, total: lensesVault.length })}</span>
             </span>
           )}
           <span
@@ -384,10 +404,10 @@ export function VaultView({
                 ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
                 : 'bg-paper-card text-ink-subtle border border-paper-border'
             }`}
-            title={isCloudConnected ? 'Supabase Cloud Sync đang hoạt động' : 'Chế độ lưu trữ Offline'}
+            title={isCloudConnected ? 'Supabase Cloud Sync active' : 'Offline Storage Mode'}
           >
             {isCloudConnected ? <Cloud size={11} className="text-emerald-500" /> : <CloudOff size={11} />}
-            <span>{isCloudConnected ? 'Cloud Sync' : 'Offline Mode'}</span>
+            <span>{isCloudConnected ? strings.cloudSyncActive : strings.cloudSyncOffline}</span>
           </span>
         </div>
       </div>
@@ -399,13 +419,14 @@ export function VaultView({
             const isVN = lens.base === 'Vietnam';
             const purchase = purchases[lens.id];
             const hasPurchaseData = Boolean(purchase && (purchase.price || purchase.seller || purchase.notes));
+            const loc = getLocalizedLens(lens);
 
             return (
               <article
                 key={lens.id}
                 onClick={() => setSelectedLensForDossier(lens)}
                 className="group cursor-pointer overflow-hidden rounded-3xl border border-paper-border bg-paper-card shadow-sm transition-all duration-300 hover:border-accent/60 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.995]"
-                aria-label={`Mở hồ sơ tác chiến cho ${lens.name}`}
+                aria-label={t('openDossierAria', { name: lens.name })}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -430,16 +451,16 @@ export function VaultView({
                         }`}
                       >
                         <span>{isVN ? '🇻🇳' : '🇫🇮'}</span>
-                        <span>{isVN ? 'Việt Nam Base' : 'Phần Lan Base'}</span>
+                        <span>{isVN ? strings.vnBaseTag : strings.fiBaseTag}</span>
                       </span>
 
                       <span className="rounded-md border border-paper-border bg-paper-card px-2 py-0.5 font-mono text-[10px] font-bold text-ink">
-                        {lens.mount}
+                        {loc.mount}
                       </span>
 
                       {lens.filterThread && (
                         <span className="rounded-md bg-surface px-2 py-0.5 font-mono text-[10px] font-semibold text-ink-subtle">
-                          Filter ⌀{lens.filterThread}
+                          {strings.filterSizePrefix}{lens.filterThread}
                         </span>
                       )}
                     </div>
@@ -463,10 +484,10 @@ export function VaultView({
                         }`}
                         title={
                           hasPurchaseData
-                            ? `Giá: ${purchase?.price || 'N/A'} - Người bán: ${purchase?.seller || 'N/A'}`
-                            : `Thêm thông tin mua hàng cho ${lens.name}`
+                            ? `Price: ${purchase?.price || 'N/A'} - Seller: ${purchase?.seller || 'N/A'}`
+                            : `Add purchase info for ${lens.name}`
                         }
-                        aria-label={`Thông tin mua hàng ${lens.name}`}
+                        aria-label={`Purchase info ${lens.name}`}
                       >
                         <span className="font-extrabold text-amber-600 dark:text-amber-400">[P]</span>
                         {purchase?.price ? (
@@ -474,14 +495,14 @@ export function VaultView({
                             {purchase.price}
                           </span>
                         ) : (
-                          <span className="text-[10px] hidden sm:inline">Mua hàng</span>
+                          <span className="text-[10px] hidden sm:inline">{strings.purchaseBtnLabel}</span>
                         )}
                       </button>
 
                       {/* Dossier Button */}
                       <span className="hidden sm:inline-flex items-center gap-1 rounded-xl border border-accent/25 bg-accent/10 px-2.5 py-1 font-mono text-[10px] font-extrabold text-accent group-hover:bg-accent group-hover:text-paper transition-all">
                         <Eye size={12} />
-                        <span>Hồ sơ Dossier ➔</span>
+                        <span>{strings.dossierBtnLabel}</span>
                       </span>
                     </div>
                   </div>
@@ -492,7 +513,7 @@ export function VaultView({
                         {lens.name}
                       </h3>
                       <p className="mt-0.5 text-xs font-semibold italic text-accent">
-                        "{lens.nickname}"
+                        "{loc.nickname}"
                       </p>
                     </div>
                     <span className="sm:hidden inline-flex items-center gap-1 rounded-lg bg-accent/10 p-1.5 text-accent group-hover:bg-accent group-hover:text-paper transition-all">
@@ -505,8 +526,8 @@ export function VaultView({
                 <div className="p-4 sm:p-5 space-y-3.5">
                   {/* Special Features tags & Purchase snapshot */}
                   <div className="flex flex-wrap items-center gap-1.5">
-                    {lens.specialFeatures &&
-                      lens.specialFeatures.map((feat) => (
+                    {loc.specialFeatures &&
+                      loc.specialFeatures.map((feat) => (
                         <span
                           key={feat}
                           className="inline-flex items-center gap-1 rounded-lg border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300"
@@ -525,11 +546,11 @@ export function VaultView({
                           setSelectedLensForPurchase(lens);
                         }}
                         className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 transition-colors"
-                        title="Bấm để xem/chỉnh sửa chi tiết mua hàng"
+                        title="Click to view/edit purchase details"
                       >
                         <DollarSign size={10} />
                         <span>
-                          {purchase?.price ? `Giá: ${purchase.price}` : 'Đã có thông tin mua'}
+                          {purchase?.price ? `${strings.pricePaidLabel}: ${purchase.price}` : strings.purchaseBtnLabel}
                           {purchase?.seller ? ` · ${purchase.seller}` : ''}
                         </span>
                       </button>
@@ -538,8 +559,8 @@ export function VaultView({
 
                   {/* History */}
                   <p className="text-xs leading-relaxed text-ink-muted line-clamp-3 sm:line-clamp-none">
-                    <strong className="font-bold text-ink">Lịch sử & Nguồn gốc: </strong>
-                    {lens.history}
+                    <strong className="font-bold text-ink">{strings.historyHeading} </strong>
+                    {loc.history}
                   </p>
 
                   {/* Optical Strengths */}
@@ -547,10 +568,10 @@ export function VaultView({
                     <div className="flex items-center gap-1.5 text-teal-800 dark:text-teal-300 mb-1">
                       <Aperture size={13} />
                       <h4 className="font-mono text-[10px] font-bold uppercase tracking-wider">
-                        Thế mạnh quang học vượt trội
+                        {strings.strengthsHeading}
                       </h4>
                     </div>
-                    <p className="text-xs leading-relaxed text-ink">{lens.strengths}</p>
+                    <p className="text-xs leading-relaxed text-ink">{loc.strengths}</p>
                   </div>
 
                   {/* Golden Milestones */}
@@ -558,11 +579,11 @@ export function VaultView({
                     <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 mb-1">
                       <Award size={13} />
                       <h4 className="font-mono text-[10px] font-bold uppercase tracking-wider">
-                        Khoảnh khắc vàng (Golden Milestones)
+                        {strings.goldenMilestonesHeading}
                       </h4>
                     </div>
                     <p className="text-xs font-semibold leading-relaxed text-ink">
-                      {lens.goldenMilestones}
+                      {loc.goldenMilestones}
                     </p>
                   </div>
 
@@ -572,7 +593,7 @@ export function VaultView({
                     <div className="flex items-center gap-1.5">
                       <Camera size={13} className="text-accent shrink-0" />
                       <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink-subtle">
-                        Body tối ưu:
+                        {strings.optimalBodyLabel}
                       </span>
                       <div className="flex gap-1">
                         {lens.recommendedBodies.map((body) => (
@@ -583,7 +604,7 @@ export function VaultView({
                               if (onSelectBody) onSelectBody(body);
                             }}
                             className="rounded-md border border-accent/20 bg-accent/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-accent hover:bg-accent hover:text-paper transition-all"
-                            title={`Lọc theo thân máy ${body}`}
+                            title={`Filter by Nikon ${body}`}
                           >
                             {body}
                           </button>
@@ -595,7 +616,7 @@ export function VaultView({
                     <div className="flex flex-wrap items-center gap-1.5">
                       <Sparkles size={13} className="text-accent shrink-0" />
                       <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-ink-subtle">
-                        Xem công thức:
+                        {strings.viewRecipeLabel}
                       </span>
                       {lens.recommendedRecipeIds.map((recipeId) => {
                         const r = recipes.find((item) => item.id === recipeId);
@@ -607,7 +628,7 @@ export function VaultView({
                               onSelectRecipe(recipeId);
                             }}
                             className="group/pill inline-flex items-center gap-1 rounded-lg border border-paper-border bg-surface px-2 py-1 font-mono text-[11px] font-bold text-ink transition-all hover:border-accent hover:bg-accent hover:text-paper active:scale-95"
-                            title={`Xem chi tiết công thức [${recipeId}] ${r?.name || ''}`}
+                            title={`View recipe [${recipeId}] ${r?.name || ''}`}
                           >
                             <span className="text-accent group-hover/pill:text-paper font-extrabold">
                               {recipeId}
@@ -630,16 +651,17 @@ export function VaultView({
       ) : (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Aperture size={36} className="text-ink-subtle" />
-          <h3 className="mt-3 text-sm font-bold text-ink">Không tìm thấy ống kính phù hợp</h3>
-          <p className="mt-1 text-xs text-ink-subtle">Thử xóa từ khóa tìm kiếm hoặc chọn danh mục Tất cả.</p>
+          <h3 className="mt-3 text-sm font-bold text-ink">{strings.noLensesFound}</h3>
+          <p className="mt-1 text-xs text-ink-subtle">{strings.noLensesFoundSub}</p>
           <button
             onClick={() => {
               setSearch('');
               setBaseFilter('All');
+              setFocalFilter('all');
             }}
             className="mt-3 rounded-xl border border-paper-border bg-paper-card px-4 py-2 font-mono text-xs font-bold text-ink transition-colors hover:bg-surface-hover"
           >
-            Đặt lại bộ lọc
+            {strings.resetVaultFilter}
           </button>
         </div>
       )}
@@ -673,4 +695,3 @@ export function VaultView({
     </div>
   );
 }
-

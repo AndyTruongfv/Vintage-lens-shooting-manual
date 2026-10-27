@@ -1,6 +1,7 @@
 import { Camera, X, Zap, Crosshair, Target, Sparkles, Aperture, Focus } from 'lucide-react';
 import type { CameraInfo } from '../types';
 import { cameras } from '../data/cameras';
+import { useLanguage } from '../context/LanguageContext';
 
 interface CameraTipsModalProps {
   body: CameraInfo['body'] | null;
@@ -14,11 +15,15 @@ const iconMap = {
 };
 
 export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
+  const { lang, getLocalizedCamera } = useLanguage();
+  const isEn = lang === 'en';
+
   if (!body) return null;
   const cam = cameras.find((c) => c.body === body);
   if (!cam) return null;
 
   const Icon = iconMap[cam.icon as keyof typeof iconMap] ?? Camera;
+  const locCam = getLocalizedCamera(cam);
 
   return (
     <div
@@ -40,13 +45,13 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
             </div>
             <div>
               <h2 className="font-mono text-base font-extrabold text-ink">{cam.label}</h2>
-              <p className="text-xs font-medium italic text-ink-subtle">{cam.subtitle}</p>
+              <p className="text-xs font-medium italic text-ink-subtle">{locCam.subtitle}</p>
             </div>
           </div>
           <button
             onClick={onClose}
             className="rounded-xl border border-paper-border bg-surface p-2 text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink"
-            aria-label="Đóng bảng hướng dẫn"
+            aria-label={isEn ? 'Close guide' : 'Đóng bảng hướng dẫn'}
           >
             <X size={16} />
           </button>
@@ -58,10 +63,10 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
             <div className="flex items-center gap-2">
               <Zap size={14} className="text-amber-600 dark:text-amber-400" />
               <h3 className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                Thế mạnh cốt lõi
+                {isEn ? 'Combat Strengths' : 'Thế mạnh cốt lõi'}
               </h3>
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-ink">{cam.strengths}</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink">{locCam.strengths}</p>
           </div>
 
           {/* Optimal Use */}
@@ -69,10 +74,10 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
             <div className="flex items-center gap-2">
               <Crosshair size={14} className="text-teal-600 dark:text-teal-400" />
               <h3 className="font-mono text-[10px] font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300">
-                Ngữ cảnh tối ưu
+                {isEn ? 'Optimal Shooting Scenarios' : 'Ngữ cảnh tối ưu'}
               </h3>
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-ink">{cam.optimalUse}</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink">{locCam.optimalUse}</p>
           </div>
 
           {/* Recommended Lenses */}
@@ -80,7 +85,7 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
             <div className="flex items-center gap-2">
               <Target size={14} className="text-rose-600 dark:text-rose-400" />
               <h3 className="font-mono text-[10px] font-bold uppercase tracking-wider text-rose-800 dark:text-rose-300">
-                Lens khuyên dùng
+                {isEn ? 'Recommended Arsenal' : 'Lens khuyên dùng'}
               </h3>
             </div>
             <p className="mt-1 text-xs font-semibold leading-relaxed text-ink">{cam.recommendedLenses}</p>
@@ -91,7 +96,7 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
             <div className="flex items-center gap-2">
               <Sparkles size={14} className="text-accent" />
               <h3 className="font-mono text-[10px] font-bold uppercase tracking-wider text-accent">
-                Recipes khuyên dùng
+                {isEn ? 'Recommended Recipes' : 'Recipes khuyên dùng'}
               </h3>
             </div>
             <p className="mt-1 text-xs font-semibold leading-relaxed text-ink">{cam.recommendedProfiles}</p>
@@ -100,10 +105,10 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
           {/* Field Tips */}
           <div className="pt-1">
             <h3 className="mb-2 font-mono text-[10px] font-extrabold uppercase tracking-wider text-ink-subtle">
-              Kinh nghiệm thực địa (Field Tips)
+              {isEn ? 'Field Experience & Tips' : 'Kinh nghiệm thực địa (Field Tips)'}
             </h3>
             <div className="space-y-2">
-              {cam.tips.map((tip, i) => (
+              {locCam.tips.map((tip, i) => (
                 <div key={i} className="flex gap-2.5 rounded-xl border border-surface-border bg-paper-card p-3 shadow-xs">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-accent/15 font-mono text-[10px] font-bold text-accent">
                     {i + 1}
@@ -118,4 +123,3 @@ export function CameraTipsModal({ body, onClose }: CameraTipsModalProps) {
     </div>
   );
 }
-

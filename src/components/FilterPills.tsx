@@ -1,24 +1,28 @@
 import type { Category } from '../types';
+import { recipes } from '../data/recipes';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FilterPillsProps {
   active: Category | 'All';
   onChange: (category: Category | 'All') => void;
 }
 
-const pills: { value: Category | 'All'; label: string }[] = [
-  { value: 'All', label: 'Tất cả (13)' },
-  { value: 'Portraits', label: 'Portraits' },
-  { value: 'Cinema/Film', label: 'Cinema / Film' },
-  { value: 'Landscape/Macro', label: 'Macro & Tĩnh vật' },
-  { value: 'Street/B&W', label: 'Street / B&W' },
-];
-
 export function FilterPills({ active, onChange }: FilterPillsProps) {
+  const { strings } = useLanguage();
+
+  const pills: { value: Category | 'All'; label: string }[] = [
+    { value: 'All', label: `${strings.filterAll} (${recipes.length})` },
+    { value: 'Portraits', label: strings.filterPortraits },
+    { value: 'Cinema/Film', label: strings.filterCinema },
+    { value: 'Landscape/Macro', label: strings.filterLandscape },
+    { value: 'Street/B&W', label: strings.filterStreet },
+  ];
+
   return (
     <div
       className="no-scrollbar flex gap-2 overflow-x-auto py-0.5"
       role="tablist"
-      aria-label="Danh mục công thức màu"
+      aria-label="Filter pills"
     >
       {pills.map(({ value, label }) => {
         const isActive = active === value;
@@ -41,4 +45,3 @@ export function FilterPills({ active, onChange }: FilterPillsProps) {
     </div>
   );
 }
-

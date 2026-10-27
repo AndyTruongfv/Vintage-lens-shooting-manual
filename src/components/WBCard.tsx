@@ -1,5 +1,6 @@
 import { Thermometer, Compass } from 'lucide-react';
 import type { WhiteBalance } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface WBCardProps {
   wb: WhiteBalance;
@@ -11,12 +12,8 @@ function parseWBValue(raw: string): number {
 }
 
 function WBGrid({ amber, magenta }: { amber: number; magenta: number }) {
-  // Nikon WB fine-tune range typically from -6 to +6 (or -9 to +9)
   const maxRange = 4;
-  // X axis: Amber (positive, right) to Blue (negative, left)
-  // Let's standardise: Center is 50%, Right is Amber (+), Left is Blue (-)
   const xPct = Math.max(5, Math.min(95, 50 + (amber / maxRange) * 45));
-  // Y axis: Magenta (positive, top) to Green (negative, bottom)
   const yPct = Math.max(5, Math.min(95, 50 - (magenta / maxRange) * 45));
 
   return (
@@ -66,6 +63,9 @@ function WBGrid({ amber, magenta }: { amber: number; magenta: number }) {
 }
 
 export function WBCard({ wb }: WBCardProps) {
+  const { lang, strings } = useLanguage();
+  const isEn = lang === 'en';
+
   const amberVal = parseWBValue(wb.amber);
   const magentaVal = parseWBValue(wb.magenta);
 
@@ -78,7 +78,7 @@ export function WBCard({ wb }: WBCardProps) {
         <div className="flex items-center gap-2">
           <Thermometer size={14} className="text-accent" />
           <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-ink">
-            White Balance Fine-Tune
+            {strings.wbFineTuneHeading}
           </h4>
         </div>
         <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-ink-subtle">
@@ -97,9 +97,11 @@ export function WBCard({ wb }: WBCardProps) {
         <div className="flex flex-1 flex-col justify-between gap-2.5">
           <div className="rounded-xl border border-surface-border bg-paper-card p-2.5">
             <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-ink-subtle">
-              Base Temperature Preset
+              {strings.wbBaseTempPreset}
             </span>
-            <p className="mt-0.5 font-mono text-xs font-bold text-ink">{wb.base}</p>
+            <p className="mt-0.5 font-mono text-xs font-bold text-ink">
+              {isEn && wb.baseEn ? wb.baseEn : wb.base}
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -112,7 +114,7 @@ export function WBCard({ wb }: WBCardProps) {
               }`}
             >
               <span className={`font-mono text-[9px] font-bold uppercase tracking-wider ${isAmber ? 'text-amber-700 dark:text-amber-400' : 'text-blue-700 dark:text-blue-400'}`}>
-                Trục Amber - Blue
+                {strings.wbAmberBlueAxis}
               </span>
               <p
                 className={`font-mono text-sm font-extrabold ${
@@ -132,7 +134,7 @@ export function WBCard({ wb }: WBCardProps) {
               }`}
             >
               <span className={`font-mono text-[9px] font-bold uppercase tracking-wider ${isMagenta ? 'text-fuchsia-700 dark:text-fuchsia-400' : 'text-emerald-700 dark:text-emerald-400'}`}>
-                Trục Green - Magenta
+                {strings.wbGreenMagentaAxis}
               </span>
               <p
                 className={`font-mono text-sm font-extrabold ${
@@ -149,11 +151,10 @@ export function WBCard({ wb }: WBCardProps) {
       {/* Field Note */}
       <div className="mt-2.5 rounded-xl border border-paper-border/60 bg-surface/80 p-2.5">
         <p className="text-xs leading-relaxed text-ink-muted">
-          <strong className="font-semibold text-ink">Ghi chú thực địa: </strong>
-          {wb.note}
+          <strong className="font-semibold text-ink">{isEn ? 'Field Note: ' : 'Ghi chú thực địa: '}</strong>
+          {isEn && wb.noteEn ? wb.noteEn : wb.note}
         </p>
       </div>
     </div>
   );
 }
-

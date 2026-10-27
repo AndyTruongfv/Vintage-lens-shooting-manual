@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Aperture, BookOpen, Camera, Film, Compass, Sliders, Layers, DownloadCloud, Smartphone, Target, ChevronRight, X } from 'lucide-react';
+import { Aperture, BookOpen, Camera, Film, Compass, Sliders, Layers, DownloadCloud, Smartphone, Target, X } from 'lucide-react';
 import type { Category, CameraBody, NavTab } from './types';
 import { recipes } from './data/recipes';
 import { cameras } from './data/cameras';
@@ -11,6 +11,7 @@ import { RecipeCard } from './components/RecipeCard';
 import { CheatsheetDrawer } from './components/CheatsheetDrawer';
 import { CameraTipsModal } from './components/CameraTipsModal';
 import { ThemeToggle, type Theme } from './components/ThemeToggle';
+import { LanguageToggle } from './components/LanguageToggle';
 import { TacticalBodyBanner } from './components/TacticalBodyBanner';
 import { MastersView } from './components/MastersView';
 import { VaultView } from './components/VaultView';
@@ -18,8 +19,10 @@ import { InstallGuideModal } from './components/InstallGuideModal';
 import { WBGuideModal } from './components/WBGuideModal';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { useLensPurchases } from './hooks/useLensPurchases';
+import { useLanguage } from './context/LanguageContext';
 
 function App() {
+  const { lang, strings, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<NavTab>('recipes');
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<Category | 'All'>('All');
@@ -41,7 +44,6 @@ function App() {
     isCloudConnected,
   } = useLensPurchases();
 
-
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     const metaTheme = document.querySelector('meta[name="theme-color"]');
@@ -61,6 +63,7 @@ function App() {
         r.tag,
         r.lensMatch,
         r.scenario,
+        r.scenarioEn || '',
         r.baseProfile,
         r.id,
         r.category,
@@ -114,7 +117,7 @@ function App() {
 
   return (
     <div className="paper-texture min-h-screen bg-paper text-ink transition-colors duration-300">
-      {/* Header bar (relative layout - scrolls away naturally with page) */}
+      {/* Header bar */}
       <header className="relative w-full border-b border-header-border bg-header/95 backdrop-blur-xl shadow-xs safe-top">
         <div className="relative w-full max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           {/* Logo & Title */}
@@ -124,16 +127,20 @@ function App() {
             </div>
             <div>
               <h1 className="font-mono text-xs sm:text-sm font-extrabold leading-tight tracking-tight text-ink">
-                Vintage Glass
+                {strings.appTitle}
               </h1>
               <p className="font-mono text-[9px] font-semibold text-accent leading-none hidden sm:block">
-                Di sản Quang học Đa quốc gia & Màu Film
+                {strings.appSubtitle}
               </p>
             </div>
           </div>
 
-          {/* Quick Header Actions */}
+          {/* Quick Header Actions: Language Switcher, Theme Toggle, Install PWA, WB Guide, Manual */}
           <div className="flex items-center gap-1 sm:gap-1.5">
+            {/* Elegant EN | VI Language Switcher */}
+            <LanguageToggle />
+
+            {/* Theme Toggle */}
             <ThemeToggle theme={theme} onChange={setTheme} />
 
             {/* Install PWA Button */}
@@ -151,39 +158,40 @@ function App() {
                   ? 'border border-emerald-500/40 bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 ring-1 ring-emerald-500/30 animate-pulse'
                   : 'border border-paper-border bg-paper-card text-ink hover:border-accent/40 hover:bg-surface-hover'
               }`}
-              title="Cài app về Màn hình chính (PWA Offline)"
-              aria-label="Cài đặt ứng dụng PWA"
+              title={strings.pwaInstallTooltip}
+              aria-label={strings.pwaInstall}
             >
               <DownloadCloud size={13} className={pwa.isInstallable ? 'text-emerald-600 dark:text-emerald-400' : 'text-accent'} />
-              <span className="hidden sm:inline">{pwa.isInstalled ? 'Đã cài PWA' : 'Cài App'}</span>
+              <span className="hidden sm:inline">{pwa.isInstalled ? strings.pwaInstalled : strings.pwaInstall}</span>
             </button>
 
             {/* Quick WB Guide Button */}
             <button
               onClick={() => setWbGuideOpen(true)}
               className="flex items-center gap-1 rounded-lg sm:rounded-xl border border-amber-500/30 bg-amber-500/10 px-2 sm:px-2.5 py-1 font-mono text-[11px] sm:text-xs font-bold text-amber-900 dark:text-amber-300 shadow-xs transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/20 active:scale-95"
-              aria-label="Mở cẩm nang cân bằng trắng WB"
-              title="Cẩm nang cân bằng trắng White Balance cho Nikon D750 & D800E"
+              aria-label={strings.wbGuideBtn}
+              title={strings.wbGuideTooltip}
             >
               <Target size={13} className="text-amber-600 dark:text-amber-400" />
-              <span className="hidden sm:inline">Chỉnh WB</span>
-              <span className="sm:hidden font-mono text-[10px]">WB</span>
+              <span className="hidden sm:inline">{strings.wbGuideBtn}</span>
+              <span className="sm:hidden font-mono text-[10px]">{strings.wbGuideBtnMobile}</span>
             </button>
 
             {/* Cheatsheet Button */}
             <button
               onClick={() => setCheatsheetOpen(true)}
               className="flex items-center gap-1 rounded-lg sm:rounded-xl border border-paper-border bg-paper-card px-2 sm:px-2.5 py-1 font-mono text-[11px] sm:text-xs font-bold text-ink shadow-xs transition-all duration-200 hover:border-accent/40 hover:bg-surface-hover active:scale-95"
-              aria-label="Mở cẩm nang & bảo dưỡng"
+              aria-label={strings.cheatsheetBtn}
+              title={strings.cheatsheetTooltip}
             >
               <BookOpen size={13} className="text-accent" />
-              <span className="hidden sm:inline">Cẩm nang</span>
+              <span className="hidden sm:inline">{strings.cheatsheetBtn}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content Area (relative layout with max-w-4xl - controls scroll naturally) */}
+      {/* Main Content Area */}
       <main className="relative w-full max-w-4xl mx-auto px-4 py-2 sm:py-3 space-y-2.5 sm:space-y-3.5">
         {/* Quick Offline PWA banner if not installed */}
         {!pwa.isInstalled && (
@@ -191,7 +199,7 @@ function App() {
             <div className="flex items-center gap-1.5 text-ink min-w-0">
               <Smartphone size={14} className="text-accent shrink-0" />
               <span className="font-semibold text-[11px] sm:text-xs leading-tight truncate">
-                Cài về màn hình chính để dùng <strong>Offline 100%</strong>
+                {strings.pwaBannerText}
               </span>
             </div>
             <button
@@ -205,12 +213,12 @@ function App() {
               }}
               className="shrink-0 rounded-lg bg-accent px-2 py-0.5 font-mono text-[10px] sm:text-[11px] font-bold text-paper hover:bg-accent/90 active:scale-95 transition-all shadow-xs"
             >
-              {pwa.isInstallable ? 'Cài ngay ➔' : 'Cách cài ➔'}
+              {pwa.isInstallable ? strings.pwaBannerInstall : strings.pwaBannerGuide}
             </button>
           </div>
         )}
 
-        {/* 3-Tab Navigation Switcher (In normal scroll flow) */}
+        {/* 3-Tab Navigation Switcher */}
         <nav className="grid grid-cols-3 gap-1 rounded-xl sm:rounded-2xl border border-paper-border bg-surface/80 p-1 shadow-inner" aria-label="Main Navigation">
           <button
             onClick={() => {
@@ -225,7 +233,7 @@ function App() {
             aria-current={activeTab === 'recipes' ? 'page' : undefined}
           >
             <Sliders size={12} className="shrink-0" />
-            <span>Recipes ({recipes.length})</span>
+            <span>{strings.navRecipes} ({recipes.length})</span>
           </button>
 
           <button
@@ -238,7 +246,7 @@ function App() {
             aria-current={activeTab === 'vault' ? 'page' : undefined}
           >
             <Layers size={12} className="shrink-0" />
-            <span>The Vault ({lensesVault.length})</span>
+            <span>{strings.navVault} ({lensesVault.length})</span>
           </button>
 
           <button
@@ -251,12 +259,12 @@ function App() {
             aria-current={activeTab === 'masters' ? 'page' : undefined}
           >
             <Compass size={12} className="shrink-0" />
-            <span>Masters</span>
+            <span>{strings.navMasters}</span>
           </button>
         </nav>
 
         {activeTab === 'vault' ? (
-          /* The Vault Tab (28 lenses in 2 bases) */
+          /* The Vault Tab */
           <VaultView
             onSelectRecipe={handleSelectRecipeFromOtherTab}
             onSelectBody={handleSelectBodyFromOtherTab}
@@ -267,7 +275,6 @@ function App() {
             isCloudConnected={isCloudConnected}
           />
         ) : activeTab === 'masters' ? (
-
           /* Masters & Trends Tab */
           <MastersView
             onSelectRecipe={handleSelectRecipeFromOtherTab}
@@ -300,14 +307,14 @@ function App() {
                 >
                   <Target size={14} className="text-amber-600 dark:text-amber-400 shrink-0" />
                   <span className="truncate">
-                    🎯 Mẹo chỉnh WB cho {bodyFilter}: Lưới 2D & 3 Bước ➔
+                    {t('wbAlertBanner', { body: bodyFilter })}
                   </span>
                 </button>
                 <button
                   onClick={() => setWbBannerDismissed(true)}
                   className="rounded-lg p-1 text-ink-muted hover:text-ink hover:bg-surface-hover shrink-0"
-                  title="Đóng thông báo"
-                  aria-label="Đóng"
+                  title="Close alert"
+                  aria-label="Close"
                 >
                   <X size={14} />
                 </button>
@@ -324,10 +331,10 @@ function App() {
             {/* Counter bar */}
             <div className="flex items-center justify-between px-1 pt-1">
               <p className="font-mono text-xs font-semibold text-ink-subtle">
-                Hiển thị <span className="font-bold text-ink">{filteredRecipes.length}</span> / {recipes.length} công thức
+                {strings.counterShowing} <span className="font-bold text-ink">{filteredRecipes.length}</span> / {recipes.length} {strings.counterOfRecipes}
                 {bodyFilter && (
                   <span className="ml-1.5 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-bold text-accent">
-                    ★ Ưu tiên Nikon {bodyFilter}
+                    {t('counterPriority', { body: bodyFilter })}
                   </span>
                 )}
               </p>
@@ -336,7 +343,7 @@ function App() {
                   onClick={() => setTipsBody(bodyFilter)}
                   className="rounded-lg bg-surface px-2 py-0.5 font-mono text-[10px] font-bold text-ink-muted hover:text-ink border border-paper-border"
                 >
-                  Mẹo {bodyFilter} ➔
+                  {t('counterTipsBtn', { body: bodyFilter })}
                 </button>
               )}
             </div>
@@ -358,8 +365,8 @@ function App() {
                 <div className="rounded-2xl bg-surface p-4 text-ink-subtle">
                   <Camera size={36} />
                 </div>
-                <h3 className="mt-3 text-sm font-bold text-ink">Không tìm thấy công thức màu phù hợp</h3>
-                <p className="mt-1 text-xs text-ink-subtle">Thử xóa từ khóa tìm kiếm hoặc chọn danh mục Tất cả.</p>
+                <h3 className="mt-3 text-sm font-bold text-ink">{strings.noRecipesFound}</h3>
+                <p className="mt-1 text-xs text-ink-subtle">{strings.noRecipesFoundSub}</p>
                 <button
                   onClick={() => {
                     setSearch('');
@@ -368,7 +375,7 @@ function App() {
                   }}
                   className="mt-4 rounded-xl border border-paper-border bg-paper-card px-4 py-2 font-mono text-xs font-bold text-ink transition-colors hover:bg-surface-hover"
                 >
-                  Đặt lại tất cả bộ lọc
+                  {strings.resetFilters}
                 </button>
               </div>
             )}
@@ -401,6 +408,3 @@ function App() {
 }
 
 export default App;
-
-
-
