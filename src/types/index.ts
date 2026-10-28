@@ -107,29 +107,74 @@ export interface DCFieldGuide {
   cinemaGlowTip: string;
 }
 
+export interface LensCondition {
+  vi: string;
+  en: string;
+}
+
+export interface LensAcquisition {
+  purchaseDate?: string;
+  seller?: string;
+  price?: string;
+  condition?: LensCondition;
+  notes?: { vi?: string; en?: string } | string;
+}
+
+export interface LensMedia {
+  images?: string[];
+  videoReview?: string;
+}
+
+export interface LensBilingualText {
+  vi: string;
+  en: string;
+}
+
+export interface LensContent {
+  history: LensBilingualText;
+  strengths: LensBilingualText;
+  milestones: LensBilingualText;
+  features?: {
+    vi: string[];
+    en: string[];
+  };
+}
+
 export interface LensVaultItem {
-  id: string;
+  id: string | number;
   name: string;
+  displayName?: string;
   nickname: string;
   nicknameEn?: string;
   base: LensLocation;
+  location?: string;
+  category?: string;
   mount: string;
   mountEn?: string;
   focalLength: string;
   maxAperture: string;
+  aperture?: string;
   filterThread?: string;
+
+  // New extended bilingual fields
+  acquisition?: LensAcquisition;
+  media?: LensMedia;
+  content?: LensContent;
+
+  // Direct fields (for backward compatibility and quick access)
   history: string;
   historyEn?: string;
   strengths: string;
   strengthsEn?: string;
   goldenMilestones: string;
   goldenMilestonesEn?: string;
+  specialFeatures?: string[];
+  specialFeaturesEn?: string[];
+
   recommendedBodies: CameraBody[];
   recommendedRecipeIds: string[];
   recommendedProfiles?: string;
   recommendedProfilesEn?: string;
-  specialFeatures?: string[];
-  specialFeaturesEn?: string[];
   dcFieldGuide?: DCFieldGuide;
 }
 

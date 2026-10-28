@@ -11,6 +11,9 @@ import {
   Crosshair,
   DollarSign,
   Edit3,
+  ShieldCheck,
+  Image as ImageIcon,
+  Video,
 } from 'lucide-react';
 import type { LensVaultItem, CameraBody, LensPurchaseInfo, Language } from '../types';
 import { recipes } from '../data/recipes';
@@ -195,6 +198,12 @@ export function LensDossierModal({
                 {lens.filterThread && (
                   <span className="rounded-md bg-surface px-2 py-0.5 text-ink-subtle">
                     {strings.filterSizePrefix}{lens.filterThread}
+                  </span>
+                )}
+
+                {loc.category && (
+                  <span className="rounded-md border border-purple-500/30 bg-purple-500/10 px-2 py-0.5 text-purple-700 dark:text-purple-300">
+                    {loc.category}
                   </span>
                 )}
               </div>
@@ -435,62 +444,129 @@ export function LensDossierModal({
               )}
             </div>
 
-            {purchaseInfo &&
-            (purchaseInfo.price ||
-              purchaseInfo.seller ||
-              purchaseInfo.purchase_date ||
-              purchaseInfo.notes) ? (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
-                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    {strings.pricePaidLabel}
-                  </span>
-                  <p className="font-bold text-ink text-sm">
-                    {purchaseInfo.price || strings.notRecorded}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
-                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    {strings.sellerLabel}
-                  </span>
-                  <p className="font-bold text-ink truncate">
-                    {purchaseInfo.seller || strings.notRecorded}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
-                  <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                    {strings.dateLabel}
-                  </span>
-                  <p className="font-bold text-ink">
-                    {purchaseInfo.purchase_date || strings.notRecorded}
-                  </p>
-                </div>
-                {purchaseInfo.notes && (
-                  <div className="sm:col-span-3 rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
-                    <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
-                      {strings.notesLabel}
-                    </span>
-                    <p className="text-ink leading-relaxed whitespace-pre-wrap">
-                      {purchaseInfo.notes}
-                    </p>
+            {(() => {
+              const effectivePrice = purchaseInfo?.price || lens.acquisition?.price;
+              const effectiveSeller = purchaseInfo?.seller || lens.acquisition?.seller;
+              const effectiveDate = purchaseInfo?.purchase_date || lens.acquisition?.purchaseDate;
+              const hasAcquisitionData = Boolean(
+                effectivePrice || effectiveSeller || effectiveDate || purchaseInfo?.notes || loc.condition
+              );
+
+              return hasAcquisitionData ? (
+                <div className="space-y-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                    <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                      <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                        {strings.pricePaidLabel}
+                      </span>
+                      <p className="font-bold text-ink text-sm">
+                        {effectivePrice || strings.notRecorded}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                      <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                        {strings.sellerLabel}
+                      </span>
+                      <p className="font-bold text-ink truncate">
+                        {effectiveSeller || strings.notRecorded}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-paper-border bg-paper-card p-2.5 space-y-0.5">
+                      <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                        {strings.dateLabel}
+                      </span>
+                      <p className="font-bold text-ink">
+                        {effectiveDate || strings.notRecorded}
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-between rounded-xl border border-dashed border-paper-border bg-surface/50 p-3 text-xs text-ink-muted">
-                <span>{strings.unrecordedPurchase}</span>
-                {onOpenPurchaseModal && (
-                  <button
-                    type="button"
-                    onClick={() => onOpenPurchaseModal(lens)}
-                    className="font-mono text-[11px] font-bold text-accent hover:underline"
-                  >
-                    {strings.enterNowBtn}
-                  </button>
-                )}
-              </div>
-            )}
+
+                  {loc.condition && (
+                    <div className="rounded-xl border border-paper-border bg-paper-card p-3 space-y-1 text-xs">
+                      <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold flex items-center gap-1">
+                        <ShieldCheck size={12} className="text-emerald-500" />
+                        <span>{strings.conditionTitle}</span>
+                      </span>
+                      <p className="text-ink leading-relaxed">
+                        {loc.condition}
+                      </p>
+                    </div>
+                  )}
+
+                  {purchaseInfo?.notes && (
+                    <div className="rounded-xl border border-paper-border bg-paper-card p-3 space-y-1 text-xs">
+                      <span className="font-mono text-[10px] text-ink-subtle uppercase font-semibold">
+                        {strings.notesLabel}
+                      </span>
+                      <p className="text-ink leading-relaxed whitespace-pre-wrap">
+                        {purchaseInfo.notes}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center justify-between rounded-xl border border-dashed border-paper-border bg-surface/50 p-3 text-xs text-ink-muted">
+                  <span>{strings.unrecordedPurchase}</span>
+                  {onOpenPurchaseModal && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenPurchaseModal(lens)}
+                      className="font-mono text-[11px] font-bold text-accent hover:underline"
+                    >
+                      {strings.enterNowBtn}
+                    </button>
+                  )}
+                </div>
+              );
+            })()}
           </div>
+
+          {/* Section 6: Thư viện ảnh & Video Review (Media Gallery) */}
+          {lens.media && ((lens.media.images && lens.media.images.length > 0) || lens.media.videoReview) && (
+            <div className="rounded-2xl border border-paper-border bg-surface/50 p-4 sm:p-5 space-y-3">
+              <div className="flex items-center gap-2 text-ink">
+                <ImageIcon size={16} className="text-accent" />
+                <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-accent">
+                  {strings.mediaTitle}
+                </h4>
+              </div>
+
+              {lens.media.images && lens.media.images.length > 0 && (
+                <div className="grid grid-cols-2 gap-2">
+                  {lens.media.images.map((img, i) => (
+                    <div
+                      key={i}
+                      className="relative aspect-video rounded-xl overflow-hidden border border-paper-border bg-black/5 flex items-center justify-center group"
+                    >
+                      <img
+                        src={img}
+                        alt={`${lens.name} specimen ${i + 1}`}
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/60 text-white font-mono text-[9px]">
+                        Specimen #{i + 1}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {lens.media.videoReview && (
+                <a
+                  href={lens.media.videoReview}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3.5 py-2 font-mono text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-all active:scale-95 shadow-xs"
+                >
+                  <Video size={14} />
+                  <span>{strings.watchVideo}</span>
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Sticky Footer: Recipe Quick Links & Close Button */}

@@ -2,6 +2,7 @@ import { lensesVault } from '../data/lenses';
 import { recipes } from '../data/recipes';
 import { cameras } from '../data/cameras';
 import type { Language } from '../types';
+import { getTranslatedLens } from '../hooks/useLensTranslation';
 
 export function generateVaultMarkdown(lang: Language = 'vi'): string {
   const vnLenses = lensesVault.filter((l) => l.base === 'Vietnam');
@@ -41,12 +42,9 @@ export function generateVaultMarkdown(lang: Language = 'vi'): string {
       })
       .join(', ');
 
-    const nickname = isEn ? lens.nicknameEn || lens.nickname : lens.nickname;
-    const mount = isEn ? lens.mountEn || lens.mount : lens.mount;
-    const features = isEn ? (lens.specialFeaturesEn || lens.specialFeatures)?.join(' · ') : lens.specialFeatures?.join(' · ');
-    const history = isEn ? lens.historyEn || lens.history : lens.history;
-    const strengths = isEn ? lens.strengthsEn || lens.strengths : lens.strengths;
-    const milestones = isEn ? lens.goldenMilestonesEn || lens.goldenMilestones : lens.goldenMilestones;
+    const loc = getTranslatedLens(lens, lang);
+    const { nickname, mount, history, strengths, milestones } = loc;
+    const features = loc.specialFeatures.join(' · ');
 
     if (isEn) {
       lines.push(
@@ -111,12 +109,9 @@ export function generateVaultMarkdown(lang: Language = 'vi'): string {
       })
       .join(', ');
 
-    const nickname = isEn ? lens.nicknameEn || lens.nickname : lens.nickname;
-    const mount = isEn ? lens.mountEn || lens.mount : lens.mount;
-    const features = isEn ? (lens.specialFeaturesEn || lens.specialFeatures)?.join(' · ') : lens.specialFeatures?.join(' · ');
-    const history = isEn ? lens.historyEn || lens.history : lens.history;
-    const strengths = isEn ? lens.strengthsEn || lens.strengths : lens.strengths;
-    const milestones = isEn ? lens.goldenMilestonesEn || lens.goldenMilestones : lens.goldenMilestones;
+    const loc = getTranslatedLens(lens, lang);
+    const { nickname, mount, history, strengths, milestones } = loc;
+    const features = loc.specialFeatures.join(' · ');
 
     if (isEn) {
       lines.push(

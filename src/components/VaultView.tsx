@@ -417,8 +417,12 @@ export function VaultView({
         <div className="grid grid-cols-1 gap-4">
           {filteredLenses.map((lens: LensVaultItem, index: number) => {
             const isVN = lens.base === 'Vietnam';
-            const purchase = purchases[lens.id];
-            const hasPurchaseData = Boolean(purchase && (purchase.price || purchase.seller || purchase.notes));
+            const purchase = purchases[String(lens.id)] || purchases[lens.id];
+            const effectivePrice = purchase?.price || lens.acquisition?.price;
+            const hasPurchaseData = Boolean(
+              (purchase && (purchase.price || purchase.seller || purchase.notes)) ||
+              (lens.acquisition && (lens.acquisition.price || lens.acquisition.seller || lens.acquisition.condition))
+            );
             const loc = getLocalizedLens(lens);
 
             return (
@@ -463,6 +467,12 @@ export function VaultView({
                           {strings.filterSizePrefix}{lens.filterThread}
                         </span>
                       )}
+
+                      {loc.category && (
+                        <span className="rounded-md border border-purple-500/20 bg-purple-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-700 dark:text-purple-300">
+                          {loc.category}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -484,15 +494,15 @@ export function VaultView({
                         }`}
                         title={
                           hasPurchaseData
-                            ? `Price: ${purchase?.price || 'N/A'} - Seller: ${purchase?.seller || 'N/A'}`
+                            ? `Price: ${effectivePrice || 'N/A'} - Seller: ${purchase?.seller || lens.acquisition?.seller || 'N/A'}`
                             : `Add purchase info for ${lens.name}`
                         }
                         aria-label={`Purchase info ${lens.name}`}
                       >
                         <span className="font-extrabold text-amber-600 dark:text-amber-400">[P]</span>
-                        {purchase?.price ? (
+                        {effectivePrice ? (
                           <span className="text-[10px] font-extrabold truncate max-w-[85px]">
-                            {purchase.price}
+                            {effectivePrice}
                           </span>
                         ) : (
                           <span className="text-[10px] hidden sm:inline">{strings.purchaseBtnLabel}</span>

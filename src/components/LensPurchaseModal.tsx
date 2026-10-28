@@ -102,7 +102,7 @@ export function LensPurchaseModal({
 
     try {
       const payload: LensPurchaseInfo = {
-        lens_id: lens.id,
+        lens_id: String(lens.id),
         price: price.trim(),
         seller: seller.trim(),
         purchase_date: purchaseDate.trim(),
@@ -145,7 +145,7 @@ export function LensPurchaseModal({
     }
     setIsSaving(true);
     try {
-      await onDelete(lens.id);
+      await onDelete(String(lens.id));
       setPrice('');
       setSeller('');
       setPurchaseDate('');

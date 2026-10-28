@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import type { Language, LensVaultItem, GenreInspiration, MasterArtist, CameraInfo } from '../types';
+import { getTranslatedLens, type TranslatedLens } from '../hooks/useLensTranslation';
 
 export interface Translations {
   // Navigation & Header
@@ -130,6 +131,11 @@ export interface Translations {
   applyRecipePrefix: string;
   notRecorded: string;
   filterSizePrefix: string;
+  conditionTitle: string;
+  mediaTitle: string;
+  watchVideo: string;
+  categoryLabel: string;
+  locationLabel: string;
 
   // Masters View
   mastersHeaderTag: string;
@@ -281,6 +287,11 @@ export const translations: Record<Language, Translations> = {
     applyRecipePrefix: 'Áp dụng Recipe:',
     notRecorded: 'Chưa ghi',
     filterSizePrefix: 'Filter ⌀',
+    conditionTitle: 'Tình trạng thấu kính & Ngoại hình (Condition)',
+    mediaTitle: 'Thư viện ảnh & Video Review (Media Gallery)',
+    watchVideo: 'Xem Video Review',
+    categoryLabel: 'Phân loại',
+    locationLabel: 'Vị trí bảo quản',
 
     // Masters View
     mastersHeaderTag: 'Inspiration & Masters Guide',
@@ -430,6 +441,11 @@ export const translations: Record<Language, Translations> = {
     applyRecipePrefix: 'Apply Recipe:',
     notRecorded: 'Not recorded',
     filterSizePrefix: 'Filter ⌀',
+    conditionTitle: 'Optical & Cosmetic Condition',
+    mediaTitle: 'Media Gallery & Video Review',
+    watchVideo: 'Watch Video Review',
+    categoryLabel: 'Category',
+    locationLabel: 'Storage Location',
 
     // Masters View
     mastersHeaderTag: 'Inspiration & Masters Guide',
@@ -458,14 +474,7 @@ interface LanguageContextType {
   toggleLang: () => void;
   t: (key: keyof Translations, params?: Record<string, string | number>) => string;
   strings: Translations;
-  getLocalizedLens: (lens: LensVaultItem) => {
-    nickname: string;
-    mount: string;
-    history: string;
-    strengths: string;
-    goldenMilestones: string;
-    specialFeatures?: string[];
-  };
+  getLocalizedLens: (lens: LensVaultItem) => TranslatedLens;
   getLocalizedGenre: (genre: GenreInspiration) => {
     title: string;
     genreTag: string;
@@ -539,24 +548,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const getLocalizedLens = useCallback(
     (lens: LensVaultItem) => {
-      if (lang === 'en') {
-        return {
-          nickname: lens.nicknameEn || lens.nickname,
-          mount: lens.mountEn || lens.mount,
-          history: lens.historyEn || lens.history,
-          strengths: lens.strengthsEn || lens.strengths,
-          goldenMilestones: lens.goldenMilestonesEn || lens.goldenMilestones,
-          specialFeatures: lens.specialFeaturesEn || lens.specialFeatures,
-        };
-      }
-      return {
-        nickname: lens.nickname,
-        mount: lens.mount,
-        history: lens.history,
-        strengths: lens.strengths,
-        goldenMilestones: lens.goldenMilestones,
-        specialFeatures: lens.specialFeatures,
-      };
+      return getTranslatedLens(lens, lang);
     },
     [lang]
   );
